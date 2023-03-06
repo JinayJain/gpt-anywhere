@@ -13,7 +13,7 @@ const theme: Components = {
         children={String(children).replace(/\n$/, "")}
         // @ts-ignore
         style={style}
-        language={match ? match[1] : "text"}
+        language={match ? match[1].toLowerCase() : "text"}
         PreTag="div"
         {...props}
       />

@@ -11,6 +11,13 @@ export const theme = extendTheme({
     heading: `'Manrope', sans-serif`,
     body: `'Manrope', sans-serif`,
   },
+  styles: {
+    global: {
+      body: {
+        bg: "#17192300",
+      },
+    },
+  },
 });
 
 export default theme;

@@ -18,17 +18,19 @@ function Search({
       >
         <HStack>
           <Input
+            size="lg"
             placeholder="Unleash your creativity"
-            variant="filled"
             onChange={(e) => setPrompt(e.target.value)}
             value={prompt}
             autoFocus
+            bg="blackAlpha.800"
+            _placeholder={{ color: "whiteAlpha.500" }}
           />
 
           <Button
+            size="lg"
             alignSelf="center"
-            colorScheme="blue"
-            variant="outline"
+            colorScheme="green"
             type="submit"
             isLoading={isLoading}
           >

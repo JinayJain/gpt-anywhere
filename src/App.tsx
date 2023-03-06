@@ -3,16 +3,16 @@ import { Box, Heading } from "@chakra-ui/react";
 import ResponseBox from "./components/ResponseBox";
 import useAI from "./hooks/useAI";
 import { useState } from "react";
-import testMarkdown from "./util/testMarkdown";
+import { fillerMarkdown } from "./util/consts";
 
 function App() {
   const ai = useAI(import.meta.env.VITE_OPENAI_API_KEY);
 
-  const [response, setResponse] = useState(testMarkdown);
+  const [response, setResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGenerate = async (prompt: string) => {
-    if (ai) {
+    if (ai && prompt) {
       setIsLoading(true);
 
       try {
@@ -41,12 +41,12 @@ function App() {
   };
 
   return (
-    <Box display="flex" flexDirection="column" h="100vh" p={4}>
+    <Box display="flex" flexDirection="column" h="100vh">
       <Search onGenerate={handleGenerate} isLoading={isLoading} mb={4} />
       <ResponseBox
-        flex={1}
-        h="100%"
+        maxH="100%"
         overflow="auto"
+        whiteSpace="pre-wrap"
         responseMarkdown={response}
       />
     </Box>

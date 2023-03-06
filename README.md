@@ -1,7 +1,9 @@
-# Tauri + React + Typescript
+# GPT Anywhere
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+Use GPT anywhere with just one shortcut.
 
-## Recommended IDE Setup
+## To-do
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+- [ ] System tray icon
+- [ ] Settings window
+- [ ] Additional configuration parameters on your search (little downward caret on search bar)

@@ -1,21 +1,45 @@
 import {
+  Text,
   Box,
   BoxProps,
-  Collapse,
-  Heading,
-  Text,
-  useDisclosure,
   Accordion,
   AccordionItem,
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  Button,
+  HStack,
+  Stack,
+  IconButton,
+  Icon,
 } from "@chakra-ui/react";
-import ChakraUIRenderer from "chakra-ui-markdown-renderer";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import renderer from "../../util/markdown";
-import testMarkdown from "../../util/testMarkdown";
-import theme from "../../util/theme";
+import { writeText } from "@tauri-apps/api/clipboard";
+import { FiClipboard, FiCopy } from "react-icons/fi";
+import { useState } from "react";
+
+const COPY_MSG_TIMEOUT = 1000;
+
+function Debug({ text }: { text: string }) {
+  return (
+    <Accordion allowToggle mt={4}>
+      <AccordionItem>
+        <h2>
+          <AccordionButton>
+            <Box as="span" flex="1" textAlign="left">
+              Debug
+            </Box>
+            <AccordionIcon />
+          </AccordionButton>
+        </h2>
+        <AccordionPanel pb={4} whiteSpace="pre-line">
+          {text}
+        </AccordionPanel>
+      </AccordionItem>
+    </Accordion>
+  );
+}
 
 function ResponseBox({
   responseMarkdown,
@@ -23,31 +47,36 @@ function ResponseBox({
 }: {
   responseMarkdown: string;
 } & BoxProps) {
-  const { isOpen, onToggle } = useDisclosure();
+  const onCopy = () => {
+    writeText(responseMarkdown);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), COPY_MSG_TIMEOUT);
+  };
 
-  return (
-    <Box {...props} bg="whiteAlpha.50" borderRadius="md">
-      <Accordion allowToggle mt={4}>
-        <AccordionItem>
-          <h2>
-            <AccordionButton>
-              <Box as="span" flex="1" textAlign="left">
-                Debug
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-          </h2>
-          <AccordionPanel pb={4} whiteSpace="pre-line">
-            {responseMarkdown}
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
+  const [isCopied, setIsCopied] = useState(false);
 
+  console.log(responseMarkdown);
+
+  return responseMarkdown ? (
+    <Box {...props} bg="blackAlpha.800" borderRadius="md">
+      <Debug text={responseMarkdown} />
       <Box p={4}>
         <ReactMarkdown children={responseMarkdown} components={renderer} />
+        <Stack position="sticky" bottom={4} right={4}>
+          <Button
+            colorScheme="green"
+            onClick={onCopy}
+            leftIcon={<Icon as={FiCopy} />}
+            size="sm"
+            variant={isCopied ? "solid" : "outline"}
+            ml="auto"
+          >
+            {isCopied ? "Copied!" : "Copy"}
+          </Button>
+        </Stack>
       </Box>
     </Box>
-  );
+  ) : null;
 }
 
 export default ResponseBox;
