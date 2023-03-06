@@ -1,54 +1,22 @@
-import {
-  Box,
-  Button,
-  Heading,
-  Input,
-  Stack,
-  Text,
-  useColorMode,
-} from "@chakra-ui/react";
-import ChakraUIRenderer from "chakra-ui-markdown-renderer";
-import { Configuration, OpenAIApi } from "openai";
-import React, { useCallback, useMemo, useState } from "react";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import useAI from "../../hooks/useAI";
+import { Box, BoxProps, Button, HStack, Input } from "@chakra-ui/react";
+import { useState } from "react";
 
-function Search() {
+function Search({
+  onGenerate = () => {},
+  isLoading = false,
+  ...props
+}: { onGenerate?: (prompt: string) => void; isLoading?: boolean } & BoxProps) {
   const [prompt, setPrompt] = useState("");
-  const [response, setResponse] = useState("");
-
-  const ai = useAI(import.meta.env.VITE_OPENAI_API_KEY);
-
-  const handleGenerate = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      if (ai) {
-        const response = await ai.createChatCompletion({
-          model: "gpt-3.5-turbo",
-          messages: [
-            {
-              role: "system",
-              content: "You are a general purpose AI-assistant.",
-            },
-            {
-              role: "user",
-              content: prompt,
-            },
-          ],
-        });
-
-        setResponse(response.data.choices[0].message?.content || "");
-        console.log(response);
-      }
-    },
-    [ai, prompt]
-  );
 
   return (
-    <Box>
-      {/* some inspiring text to let your creativity run wild (or similar and more concise) */}
-      <form onSubmit={handleGenerate}>
-        <Stack>
+    <Box display="flex" flexDirection="column" {...props}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          onGenerate(prompt);
+        }}
+      >
+        <HStack>
           <Input
             placeholder="Unleash your creativity"
             variant="filled"
@@ -62,17 +30,12 @@ function Search() {
             colorScheme="blue"
             variant="outline"
             type="submit"
+            isLoading={isLoading}
           >
             Generate
           </Button>
-        </Stack>
+        </HStack>
       </form>
-
-      <ReactMarkdown
-        components={ChakraUIRenderer()}
-        children={response}
-        skipHtml
-      />
     </Box>
   );
 }

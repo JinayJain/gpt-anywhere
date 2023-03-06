@@ -1,8 +1,6 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::sync::Arc;
-
 use tauri::{GlobalShortcutManager, Manager};
 
 const SHORTCUT_SHOW_HIDE: &str = "CmdOrCtrl+Shift+/";

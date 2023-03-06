@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Box, Heading, IconButton } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 
