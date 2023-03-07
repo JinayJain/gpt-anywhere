@@ -1,3 +1,7 @@
+const SYSTEM_PROMPT =
+  "You are a friendly AI assistant. Answer only the question being asked in a concise manner. Markdown, KaTeX, and emojis are supported.";
+const MAX_TOKENS = 300;
+
 const fillerMarkdown = `
 # Welcome to the React Markdown Previewer!
 
@@ -23,6 +27,14 @@ Or _italic_.
 Or... wait for it... **_both!_**
 And feel free to go crazy ~~crossing stuff out~~.
 
+$$ \\frac{1}{n^{2}} $$
+
+- Bullet list
+
+- With spacing
+
+- And more spacing
+
 There's also [links](https://www.freecodecamp.org), and
 > Block Quotes!
 
@@ -42,4 +54,4 @@ And here. | Okay. | I think we get it.
 
 `;
 
-export { fillerMarkdown };
+export { fillerMarkdown, SYSTEM_PROMPT, MAX_TOKENS };

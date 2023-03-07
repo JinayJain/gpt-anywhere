@@ -21,6 +21,9 @@ import { FiClipboard, FiCopy, FiRefreshCw } from "react-icons/fi";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import CopyButton from "./CopyButton";
+import remarkBreaks from "remark-breaks";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 
 const COPY_MSG_TIMEOUT = 1000;
 
@@ -72,7 +75,12 @@ function ResponseBox({
         >
           {/* <Debug text={responseMarkdown} /> */}
           <Box p={4}>
-            <ReactMarkdown children={responseMarkdown} components={renderer} />
+            <ReactMarkdown
+              remarkPlugins={[remarkBreaks, remarkMath]}
+              rehypePlugins={[rehypeKatex]}
+              children={responseMarkdown}
+              components={renderer}
+            />
             <HStack position="sticky" bottom={4} right={4}>
               <Button onClick={onClear} size="sm" ml="auto">
                 Clear

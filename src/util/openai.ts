@@ -1,11 +1,10 @@
 import { CreateChatCompletionRequest } from "openai";
+import { SYSTEM_PROMPT, MAX_TOKENS } from "./consts";
 
 type ApiParams = Omit<
   CreateChatCompletionRequest,
   "model" | "messages" | "stream"
 >;
-
-const MAX_TOKENS = 200;
 
 async function processLine(line: string) {
   const sliced = line.replace(/^data: /, "");
@@ -43,7 +42,13 @@ async function sendApiRequest(prompt: string, apiParams?: ApiParams) {
     },
     body: JSON.stringify({
       model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: prompt }],
+      messages: [
+        {
+          role: "system",
+          content: SYSTEM_PROMPT,
+        },
+        { role: "user", content: prompt },
+      ],
       stream: true,
       max_tokens: MAX_TOKENS,
       ...apiParams,
