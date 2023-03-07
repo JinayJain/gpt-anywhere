@@ -7,13 +7,14 @@ const fillerMarkdown = `
 
 Heres some code, \`<div></div>\`, between 2 backticks.
 
-\`\`\`js
+\`\`\`rust
 // this is multi-line code:
 
-function anotherExample(firstLine, lastLine) {
-  if (firstLine == '\`\`\`' && lastLine == '\`\`\`') {
-    return multiLineCode;
+fn fib(n: u32) -> u32 {
+  if n <= 1 {
+    return n;
   }
+  fib(n - 1) + fib(n - 2)
 }
 \`\`\`
 
@@ -37,7 +38,7 @@ And here. | Okay. | I think we get it.
      - With different indentation levels.
         - That look like this.
         
-![React Logo w/ Text](https://goo.gl/Umyytc)
+![React Logo w/ Text](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/2300px-React-icon.svg.png)
 
 `;
 
