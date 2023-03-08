@@ -1,6 +1,15 @@
-const SYSTEM_PROMPT =
-  "You are a friendly AI assistant. Answer only the question being asked in a concise manner. Markdown, KaTeX, and emojis are supported.";
+const PROMPTS = {
+  base: "You are a friendly AI assistant. Answer only the question being asked in a concise manner. Use Markdown, KaTeX, escape sequences, and emojis when appropriate.",
+  linuxTerminal:
+    "Act as a hypothetical Linux terminal. Only provide the output of commands I give you. Do not include anything else. Use Markdown code blocks to format output.",
+  python:
+    "Act as a hypothetical Python interpreter. Do not ask for more information. Assume all files/libraries are present. Only provide the output of code I give you. Do not include anything else. Use Markdown code blocks to format output.",
+};
+
+const SYSTEM_PROMPT = PROMPTS.base;
 const MAX_TOKENS = 300;
+
+const API_KEY_FILE = "api-key.txt";
 
 const fillerMarkdown = `
 # Welcome to the React Markdown Previewer!
@@ -54,4 +63,4 @@ And here. | Okay. | I think we get it.
 
 `;
 
-export { fillerMarkdown, SYSTEM_PROMPT, MAX_TOKENS };
+export { fillerMarkdown, SYSTEM_PROMPT, MAX_TOKENS, API_KEY_FILE };

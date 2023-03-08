@@ -1,5 +1,6 @@
+import { BaseDirectory, readTextFile } from "@tauri-apps/api/fs";
 import { CreateChatCompletionRequest } from "openai";
-import { SYSTEM_PROMPT, MAX_TOKENS } from "./consts";
+import { SYSTEM_PROMPT, MAX_TOKENS, API_KEY_FILE } from "./consts";
 
 type ApiParams = Omit<
   CreateChatCompletionRequest,
@@ -31,7 +32,14 @@ async function processLine(line: string) {
 }
 
 async function sendApiRequest(prompt: string, apiParams?: ApiParams) {
-  const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+  // const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+  console.log("API_KEY_FILE", API_KEY_FILE);
+
+  const OPENAI_API_KEY = await readTextFile(API_KEY_FILE, {
+    dir: BaseDirectory.AppData,
+  });
+
+  console.log("OPENAI_API_KEY", OPENAI_API_KEY);
 
   return await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",

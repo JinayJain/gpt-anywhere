@@ -13,6 +13,7 @@ import {
   IconButton,
   Icon,
   Flex,
+  Tooltip,
 } from "@chakra-ui/react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import renderer from "../util/markdown";
@@ -85,12 +86,14 @@ function ResponseBox({
               <Button onClick={onClear} size="sm" ml="auto">
                 Clear
               </Button>
-              <IconButton
-                aria-label="Regenerate"
-                icon={<Icon as={FiRefreshCw} />}
-                size="sm"
-                onClick={onRegenerate}
-              />
+              <Tooltip label="Regenerate Response">
+                <IconButton
+                  aria-label="Regenerate"
+                  icon={<Icon as={FiRefreshCw} />}
+                  size="sm"
+                  onClick={onRegenerate}
+                />
+              </Tooltip>
               <CopyButton onCopy={onCopy} />
             </HStack>
           </Box>

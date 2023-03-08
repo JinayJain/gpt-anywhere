@@ -1,17 +1,15 @@
-import Search from "./components/Search";
+import Search from "../components/Search";
 import { Box, Heading } from "@chakra-ui/react";
-import ResponseBox from "./components/ResponseBox";
-import useAI from "./hooks/useAI";
-import { useState } from "react";
-import { fillerMarkdown } from "./util/consts";
-import { chatComplete } from "./util/openai";
+import ResponseBox from "../components/ResponseBox";
+import { useEffect, useState } from "react";
+import { fillerMarkdown } from "../util/consts";
+import { chatComplete } from "../util/openai";
+import { listen, TauriEvent } from "@tauri-apps/api/event";
 
 const CLEAR_TEXT = "";
 // const CLEAR_TEXT = fillerMarkdown;
 
 function App() {
-  const ai = useAI(import.meta.env.VITE_OPENAI_API_KEY);
-
   const [response, setResponse] = useState(CLEAR_TEXT);
   const [isLoading, setIsLoading] = useState(false);
   const [lastPrompt, setLastPrompt] = useState("");
@@ -19,7 +17,7 @@ function App() {
   const handleGenerate = async (prompt: string, temperature = 1.0) => {
     setLastPrompt(prompt);
 
-    if (ai && prompt) {
+    if (prompt) {
       setIsLoading(true);
 
       try {
