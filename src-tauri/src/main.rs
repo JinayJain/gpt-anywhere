@@ -80,6 +80,7 @@ fn main() {
     let sys_tray = build_system_tray();
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_store::Builder::default().build())
         .system_tray(sys_tray)
         .setup(|app| {
             // get window

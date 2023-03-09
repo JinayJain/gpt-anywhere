@@ -1,6 +1,7 @@
 import { BaseDirectory, readTextFile } from "@tauri-apps/api/fs";
 import { CreateChatCompletionRequest } from "openai";
-import { SYSTEM_PROMPT, MAX_TOKENS, API_KEY_FILE } from "./consts";
+import { SYSTEM_PROMPT, MAX_TOKENS, STORE_KEY } from "./consts";
+import store from "./store";
 
 type ApiParams = Omit<
   CreateChatCompletionRequest,
@@ -8,7 +9,7 @@ type ApiParams = Omit<
 >;
 
 async function processLine(line: string) {
-  const sliced = line.replace(/^data: /, "");
+  const sliced = line.slice(6).trim();
 
   if (sliced === "[DONE]") {
     return {
@@ -16,7 +17,7 @@ async function processLine(line: string) {
     };
   }
 
-  const data = JSON.parse(line.slice(6));
+  const data = JSON.parse(sliced);
   const msg: string = data?.choices?.[0]?.delta?.content;
 
   if (msg) {
@@ -33,13 +34,7 @@ async function processLine(line: string) {
 
 async function sendApiRequest(prompt: string, apiParams?: ApiParams) {
   // const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
-  console.log("API_KEY_FILE", API_KEY_FILE);
-
-  const OPENAI_API_KEY = await readTextFile(API_KEY_FILE, {
-    dir: BaseDirectory.AppData,
-  });
-
-  console.log("OPENAI_API_KEY", OPENAI_API_KEY);
+  const OPENAI_API_KEY = await store.get(STORE_KEY.API_KEY);
 
   return await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",

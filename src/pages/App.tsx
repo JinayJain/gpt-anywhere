@@ -1,10 +1,9 @@
 import Search from "../components/Search";
-import { Box, Heading } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import ResponseBox from "../components/ResponseBox";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { fillerMarkdown } from "../util/consts";
 import { chatComplete } from "../util/openai";
-import { listen, TauriEvent } from "@tauri-apps/api/event";
 
 const CLEAR_TEXT = "";
 // const CLEAR_TEXT = fillerMarkdown;

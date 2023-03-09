@@ -1,17 +1,19 @@
-const PROMPTS = {
+export const PROMPTS = {
   base: "You are a friendly AI assistant. Answer only the question being asked in a concise manner. Use Markdown, KaTeX, escape sequences, and emojis when appropriate.",
   linuxTerminal:
     "Act as a hypothetical Linux terminal. Only provide the output of commands I give you. Do not include anything else. Use Markdown code blocks to format output.",
   python:
     "Act as a hypothetical Python interpreter. Do not ask for more information. Assume all files/libraries are present. Only provide the output of code I give you. Do not include anything else. Use Markdown code blocks to format output.",
+} as const;
+
+export const SYSTEM_PROMPT = PROMPTS.base;
+export const MAX_TOKENS = 300;
+
+export const STORE_KEY = {
+  API_KEY: "api_key",
 };
 
-const SYSTEM_PROMPT = PROMPTS.base;
-const MAX_TOKENS = 300;
-
-const API_KEY_FILE = "api-key.txt";
-
-const fillerMarkdown = `
+export const fillerMarkdown = `
 # Welcome to the React Markdown Previewer!
 
 ## This is a sub-heading...
@@ -62,5 +64,3 @@ And here. | Okay. | I think we get it.
 ![React Logo w/ Text](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/2300px-React-icon.svg.png)
 
 `;
-
-export { fillerMarkdown, SYSTEM_PROMPT, MAX_TOKENS, API_KEY_FILE };

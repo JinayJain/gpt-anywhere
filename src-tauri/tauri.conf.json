@@ -17,19 +17,6 @@
     },
     "allowlist": {
       "all": false,
-      "fs": {
-        "all": false,
-        "copyFile": false,
-        "createDir": false,
-        "exists": true,
-        "readDir": false,
-        "readFile": true,
-        "removeDir": false,
-        "removeFile": false,
-        "renameFile": false,
-        "writeFile": true,
-        "scope": ["$APPDATA/*"]
-      },
       "clipboard": {
         "all": true
       },
@@ -63,7 +50,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "dev.jinay.gpt-anywhere",
+      "identifier": "dev.jinay.slash-gpt",
       "targets": "all"
     },
     "security": {

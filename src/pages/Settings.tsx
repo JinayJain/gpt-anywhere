@@ -12,13 +12,8 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import {
-  BaseDirectory,
-  exists,
-  readTextFile,
-  writeTextFile,
-} from "@tauri-apps/api/fs";
-import { API_KEY_FILE } from "../util/consts";
+import { STORE_KEY } from "../util/consts";
+import store from "../util/store";
 
 function Settings() {
   const toast = useToast();
@@ -26,13 +21,11 @@ function Settings() {
 
   useEffect(() => {
     const populateApiKey = async () => {
-      if (!exists(API_KEY_FILE, { dir: BaseDirectory.AppData })) return;
+      const key: string | null = await store.get(STORE_KEY.API_KEY);
 
-      const key = await readTextFile(API_KEY_FILE, {
-        dir: BaseDirectory.AppData,
-      });
-
-      setApiKey(key);
+      if (key) {
+        setApiKey(key);
+      }
     };
 
     populateApiKey();
@@ -41,9 +34,8 @@ function Settings() {
   const handleSave = async () => {
     if (!apiKey) return;
 
-    await writeTextFile("api-key.txt", apiKey, {
-      dir: BaseDirectory.AppData,
-    });
+    await store.set(STORE_KEY.API_KEY, apiKey);
+    await store.save();
 
     toast({
       title: "Saved",
