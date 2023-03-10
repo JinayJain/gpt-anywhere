@@ -22,7 +22,6 @@ function App() {
       try {
         setResponse(CLEAR_TEXT);
 
-        // setResponse(fillerMarkdown);
         await chatComplete({
           prompt,
           onChunk(chunk) {

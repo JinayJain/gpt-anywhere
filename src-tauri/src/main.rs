@@ -50,6 +50,11 @@ fn show_window(window: &tauri::Window) {
     window.set_focus().unwrap();
 }
 
+#[tauri::command]
+fn open_settings(app: tauri::AppHandle) {
+    handle_settings(&app);
+}
+
 fn handle_settings(app: &tauri::AppHandle) {
     // hide main window
     let window = app.get_window("main").unwrap();
@@ -95,7 +100,7 @@ fn main() {
             // setup code here
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![])
+        .invoke_handler(tauri::generate_handler![open_settings])
         .on_system_tray_event(|app, event| match event {
             tauri::SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                 "toggle_show" => handle_show_hide(app),

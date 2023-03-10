@@ -12,7 +12,7 @@ const theme: Components = {
     const match = /language-(\w+)/.exec(className || "");
 
     return !inline ? (
-      <Box position="relative">
+      <Box position="relative" role="group">
         <SyntaxHighlighter
           children={String(children).replace(/\n$/, "")}
           // @ts-ignore
@@ -22,7 +22,15 @@ const theme: Components = {
           {...props}
         />
 
-        <Box position="absolute" top={4} right={4} bottom={4}>
+        <Box
+          position="absolute"
+          top={4}
+          right={4}
+          bottom={4}
+          opacity={0}
+          transition="opacity 0.2s"
+          _groupHover={{ opacity: 1 }}
+        >
           <CopyButton
             iconOnly
             onCopy={() => writeText(String(children))}

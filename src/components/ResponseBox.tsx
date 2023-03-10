@@ -75,15 +75,32 @@ function ResponseBox({
           {...props}
         >
           {/* <Debug text={responseMarkdown} /> */}
-          <Box p={4}>
-            <ReactMarkdown
-              remarkPlugins={[remarkBreaks, remarkMath]}
-              rehypePlugins={[rehypeKatex]}
-              children={responseMarkdown}
-              components={renderer}
-            />
-            <HStack position="sticky" bottom={4} right={4}>
-              <Button onClick={onClear} size="sm" ml="auto">
+          <Box>
+            <Box px={4} pt={4}>
+              <ReactMarkdown
+                remarkPlugins={[remarkBreaks, remarkMath]}
+                rehypePlugins={[rehypeKatex]}
+                children={responseMarkdown}
+                components={renderer}
+              />
+            </Box>
+            <HStack
+              position="sticky"
+              bottom={0}
+              right={0}
+              pt={8}
+              pb={4}
+              px={4}
+              bg="linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1.0))"
+            >
+              <Button
+                onClick={onClear}
+                size="sm"
+                ml="auto"
+                boxShadow="md"
+                colorScheme="red"
+                variant="outline"
+              >
                 Clear
               </Button>
               <Tooltip label="Regenerate Response">
@@ -91,10 +108,11 @@ function ResponseBox({
                   aria-label="Regenerate"
                   icon={<Icon as={FiRefreshCw} />}
                   size="sm"
+                  boxShadow="md"
                   onClick={onRegenerate}
                 />
               </Tooltip>
-              <CopyButton onCopy={onCopy} />
+              <CopyButton onCopy={onCopy} size="sm" />
             </HStack>
           </Box>
         </Box>

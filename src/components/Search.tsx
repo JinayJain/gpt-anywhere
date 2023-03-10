@@ -1,5 +1,6 @@
 import { Box, BoxProps, Button, HStack, Input } from "@chakra-ui/react";
 import { listen } from "@tauri-apps/api/event";
+import { appWindow } from "@tauri-apps/api/window";
 import { useEffect, useRef, useState } from "react";
 
 function Search({
@@ -39,6 +40,9 @@ function Search({
             autoFocus
             bg="blackAlpha.800"
             _placeholder={{ color: "whiteAlpha.500" }}
+            onMouseDown={(e) => {
+              appWindow.startDragging();
+            }}
           />
 
           <Button

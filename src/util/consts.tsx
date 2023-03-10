@@ -1,5 +1,5 @@
 export const PROMPTS = {
-  base: "You are a friendly AI assistant. Answer only the question being asked in a concise manner. Use Markdown, KaTeX, escape sequences, and emojis when appropriate.",
+  base: "You are a friendly AI assistant. Answer only the question being asked in a concise manner. Use Markdown, KaTeX, {{ placeholders }}, and emojis when appropriate.",
   linuxTerminal:
     "Act as a hypothetical Linux terminal. Only provide the output of commands I give you. Do not include anything else. Use Markdown code blocks to format output.",
   python:
