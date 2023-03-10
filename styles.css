@@ -1,0 +1,60 @@
+html,
+body {
+    font-family: 'Manrope', sans-serif;
+
+    background-color: rgb(15, 15, 17);
+    color: rgb(253, 247, 240);
+}
+
+body {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color:rgb(156, 238, 153);
+}
+
+
+.title-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+}
+
+#title {
+    font-size: 2.5em;
+    font-weight: 600;
+    text-align: center;
+    margin: 0 0 0.5rem 0;
+    padding: 0;
+}
+
+#description {
+    font-size: 1.5em;
+    font-weight: 400;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.use-case {
+    padding: 2rem 0;
+    border-top: 1px solid rgb(156, 238, 153);
+}
+
+.use-case h2 {
+    font-size: 1.5em;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    padding: 0;
+}
+
+.use-case p {
+    font-size: 1.2em;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+}
