@@ -1,56 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GPT Anywhere</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
-</head>
+  </head>
 
-<body>
-    <div class="title-box">
+  <body>
+    <div id="root">
+      <div id="background"></div>
+      <div id="cursor-glow"></div>
+      <div class="title-box">
         <h1 id="title">GPT Anywhere</h1>
         <p id="description">
-            Access the world's most advanced AI at the push of a button, anywhere you go.
+          Access the world's most advanced AI at the push of a button, anywhere
+          you go.
         </p>
-    </div>
+      </div>
 
-    <div class="use-cases-title">
-        <h1>
-            Use Cases
-        </h1>
-    </div>
-    <div class="use-cases">
+      <div id="demo-box">
+        <video id="demo" controls>
+          <source src="assets/demo.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <h1 id="demo-caption">See for yourself</h1>
+      </div>
+
+      <div class="section"></div>
+
+      <div class="use-cases-title">
+        <h1>Use Cases</h1>
+      </div>
+      <div class="use-cases">
         <div class="use-case">
-            <h2>Productivity</h2>
-            <p>Use GPT Anywhere to write emails, reports, and more</p>
+          <h2>Productivity</h2>
+          <p>Use GPT Anywhere to write emails, reports, and more</p>
         </div>
 
         <div class="use-case">
-            <h2>
-                Entertainment
-            </h2>
-            <p>
-                Craft fun stories and poems to share with friends
-            </p>
+          <h2>Entertainment</h2>
+          <p>Craft fun stories and poems to share with friends</p>
         </div>
 
         <div class="use-case">
-            <h2>
-                Education
-            </h2>
-            <p>
-                Specific responses for all your questions, faster than you can search Google
-            </p>
+          <h2>Education</h2>
+          <p>
+            Specific responses for all your questions, faster than you can
+            search Google
+          </p>
         </div>
-
+      </div>
     </div>
 
-</body>
-
+    <script src="app.js"></script>
+  </body>
 </html>
