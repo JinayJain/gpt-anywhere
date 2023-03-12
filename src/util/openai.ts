@@ -95,6 +95,7 @@ async function processBody(
     }
   }
 
+  console.log(finalMessage);
   return finalMessage;
 }
 
