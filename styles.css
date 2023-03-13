@@ -112,11 +112,11 @@ h6 {
 }
 
 #download-box {
-  margin-top: 2rem;
+  text-align: center;
 }
 
 #download-box button {
-  margin: 1rem;
+  margin: 2rem 1rem 0.5rem 1rem;
   font-size: 1.2em;
   font-weight: 400;
   font-family: inherit;
@@ -137,6 +137,15 @@ h6 {
 #download-box button:active {
   /* darken color */
   background-color: rgb(113, 167, 113);
+}
+
+#download-box p {
+  font-size: 0.9em;
+  color: rgb(140, 140, 148);
+  font-weight: 400;
+  text-align: center;
+  margin: 0;
+  padding: 0;
 }
 
 #demo-box {
