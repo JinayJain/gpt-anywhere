@@ -1,3 +1,9 @@
+:root {
+  --green: rgb(156, 238, 153);
+  --dark: rgb(15, 15, 17);
+  --light: rgb(253, 247, 240);
+}
+
 @font-face {
   font-family: "Literata";
   src: url("./assets/Literata-Variable.ttf") format("truetype");
@@ -11,13 +17,13 @@ body {
 }
 
 body {
-  color: rgb(253, 247, 240);
-  background-color: rgb(15, 15, 17);
+  color: var(--light);
+  background-color: var(--dark);
 }
 
 ::-moz-selection {
-  background-color: rgb(156, 238, 153);
-  color: rgb(15, 15, 17);
+  background-color: var(--green);
+  color: var(--dark);
 }
 
 ::selection {
@@ -52,7 +58,7 @@ body {
   );
 
   --grid-size: 64px;
-  --grid-color: rgba(140, 140, 148, 0.1);
+  --grid-color: rgba(140, 140, 148, 0.25);
   background-size: var(--grid-size) var(--grid-size);
   background-image: linear-gradient(
       to right,
