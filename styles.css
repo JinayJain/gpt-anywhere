@@ -146,7 +146,6 @@ h6 {
 }
 
 #download-box p {
-  font-size: 0.9em;
   color: rgb(140, 140, 148);
   font-weight: 400;
   text-align: center;
@@ -154,41 +153,72 @@ h6 {
   padding: 0;
 }
 
-#demo-box {
-  width: 80%;
-  margin: 0 auto;
+a {
+  color: var(--light);
 }
 
-#demo {
+a:hover {
+  color: rgb(156, 238, 153);
+}
+
+#source-code {
+  margin-top: 0.5rem;
+}
+
+.use-case {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+
+  margin-bottom: 4rem;
+}
+
+.use-case:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+@media (max-width: 768px) {
+  .use-case {
+    flex-direction: column;
+  }
+
+  .use-case:nth-child(even) {
+    flex-direction: column;
+  }
+}
+
+.use-case .content {
+  flex: 1;
+}
+
+.use-case .content h1 {
+  font-size: 2em;
+  margin: 0 0 0.5rem 0;
+  padding: 0;
+}
+
+.use-case .content p {
+  font-size: 1.2em;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+}
+
+.use-case .video {
+  flex: 1;
+}
+
+.use-case video {
   width: 100%;
+
+  border-radius: 0.5rem;
 
   /* variable for glow color */
   --glow-color: rgba(228, 248, 228, 0.2);
   box-shadow: 0px 0px 56px 0px var(--glow-color);
 }
 
-#demo-caption {
-  font-size: 1.2em;
-  font-weight: 400;
+.credit {
   text-align: center;
-  padding: 0;
-}
-
-.use-case {
-  padding: 2rem 0;
-  border-top: 1px solid rgb(156, 238, 153);
-}
-
-.use-case h2 {
-  font-size: 1.5em;
-  font-weight: 600;
-  margin: 0 0 0.5rem 0;
-  padding: 0;
-}
-
-.use-case p {
-  font-size: 1.2em;
-  font-weight: 400;
-  margin: 0;
-  padding: 0;
+  margin: 2rem 0;
 }
