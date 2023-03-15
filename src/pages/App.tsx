@@ -1,5 +1,5 @@
 import Search from "../components/Search";
-import { Box } from "@chakra-ui/react";
+import { Box, Heading, Text } from "@chakra-ui/react";
 import ResponseBox from "../components/ResponseBox";
 import { useState } from "react";
 import { fillerMarkdown } from "../util/consts";
@@ -62,15 +62,23 @@ function App() {
             exit={{ opacity: 0, scale: 0.9 }}
             maxH="100%"
             overflow="auto"
-            p={4}
           >
             {error ? (
               error.message === "Unauthorized" ? (
                 <UnauthorizedErrorBox />
               ) : (
                 <Box>
-                  <h1>Error</h1>
-                  <p>{error.message}</p>
+                  <Heading size="sm">
+                    An error occurred while generating a response.
+                  </Heading>
+
+                  <Text>
+                    Please try again. If the problem persists, please{" "}
+                    <a href="https://github.com/jinayjain/gpt-anywhere/issues">
+                      open an issue
+                    </a>
+                    .
+                  </Text>
                 </Box>
               )
             ) : (

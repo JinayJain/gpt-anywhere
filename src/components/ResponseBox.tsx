@@ -63,8 +63,8 @@ function ResponseBox({
   };
 
   return responseMarkdown ? (
-    <Box>
-      <Box>
+    <Box {...props}>
+      <Box px={4} py={4} overflowY="auto" flex={1}>
         <ReactMarkdown
           remarkPlugins={[remarkBreaks, remarkMath]}
           rehypePlugins={[rehypeKatex]}
@@ -72,12 +72,15 @@ function ResponseBox({
           components={renderer}
         />
       </Box>
+
       <HStack
         position="sticky"
         bottom={0}
         right={0}
         pt={8}
         bg="linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1.0))"
+        pb={4}
+        px={4}
       >
         <Button
           onClick={onClear}
