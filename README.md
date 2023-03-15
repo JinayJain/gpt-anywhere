@@ -11,7 +11,7 @@
 
 1. If you don't already, sign up for an account with [OpenAI](https://platform.openai.com/)
 2. Create an [API key](https://platform.openai.com/account/api-keys). 
-3. Then, navigate to the settings page of GPT Anywhere using the tray icon. 
+3. Then, navigate to the settings page of GPT Anywhere using the tray icon. Or hit generate with a prompt and hit the "Open Settings" button
 4. Finally, paste and save your API key.
 
 ## Open GPT Anywhere
