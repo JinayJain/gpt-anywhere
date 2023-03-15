@@ -4,12 +4,15 @@ import ResponseBox from "../components/ResponseBox";
 import { useState } from "react";
 import { fillerMarkdown } from "../util/consts";
 import { chatComplete } from "../util/openai";
+import { AnimatePresence, motion } from "framer-motion";
+import UnauthorizedErrorBox from "../components/UnauthorizedErrorBox";
 
 const CLEAR_TEXT = "";
 // const CLEAR_TEXT = fillerMarkdown;
 
 function App() {
   const [response, setResponse] = useState(CLEAR_TEXT);
+  const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [lastPrompt, setLastPrompt] = useState("");
 
@@ -17,6 +20,7 @@ function App() {
     setLastPrompt(prompt);
 
     if (prompt) {
+      setError(null);
       setIsLoading(true);
 
       try {
@@ -32,7 +36,11 @@ function App() {
           },
         });
       } catch (e) {
-        console.error(e);
+        if (e instanceof Error) {
+          setError(e);
+        }
+
+        console.log(e);
       }
 
       setIsLoading(false);
@@ -42,13 +50,39 @@ function App() {
   return (
     <Box display="flex" flexDirection="column" h="100vh">
       <Search onGenerate={handleGenerate} isLoading={isLoading} mb={4} />
-      <ResponseBox
-        onClear={() => setResponse(CLEAR_TEXT)}
-        onRegenerate={() => handleGenerate(lastPrompt, 1.5)}
-        maxH="100%"
-        overflow="auto"
-        responseMarkdown={response}
-      />
+
+      <AnimatePresence>
+        {(error || response) && (
+          <Box
+            as={motion.div}
+            bg="blackAlpha.800"
+            borderRadius="md"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            maxH="100%"
+            overflow="auto"
+            p={4}
+          >
+            {error ? (
+              error.message === "Unauthorized" ? (
+                <UnauthorizedErrorBox />
+              ) : (
+                <Box>
+                  <h1>Error</h1>
+                  <p>{error.message}</p>
+                </Box>
+              )
+            ) : (
+              <ResponseBox
+                onClear={() => setResponse(CLEAR_TEXT)}
+                onRegenerate={() => handleGenerate(lastPrompt, 1.5)}
+                responseMarkdown={response}
+              />
+            )}
+          </Box>
+        )}
+      </AnimatePresence>
     </Box>
   );
 }
