@@ -62,63 +62,49 @@ function ResponseBox({
     writeText(responseMarkdown);
   };
 
-  return (
-    <AnimatePresence>
-      {responseMarkdown && (
-        <Box
-          as={motion.div}
-          bg="blackAlpha.800"
-          borderRadius="md"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.9 }}
-          {...props}
+  return responseMarkdown ? (
+    <Box {...props}>
+      <Box px={4} py={4} overflowY="auto" flex={1}>
+        <ReactMarkdown
+          remarkPlugins={[remarkBreaks, remarkMath]}
+          rehypePlugins={[rehypeKatex]}
+          children={responseMarkdown}
+          components={renderer}
+        />
+      </Box>
+
+      <HStack
+        position="sticky"
+        bottom={0}
+        right={0}
+        pt={8}
+        bg="linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1.0))"
+        pb={4}
+        px={4}
+      >
+        <Button
+          onClick={onClear}
+          size="sm"
+          ml="auto"
+          boxShadow="md"
+          colorScheme="red"
+          variant="outline"
         >
-          {/* <Debug text={responseMarkdown} /> */}
-          <Box>
-            <Box px={4} pt={4}>
-              <ReactMarkdown
-                remarkPlugins={[remarkBreaks, remarkMath]}
-                rehypePlugins={[rehypeKatex]}
-                children={responseMarkdown}
-                components={renderer}
-              />
-            </Box>
-            <HStack
-              position="sticky"
-              bottom={0}
-              right={0}
-              pt={8}
-              pb={4}
-              px={4}
-              bg="linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1.0))"
-            >
-              <Button
-                onClick={onClear}
-                size="sm"
-                ml="auto"
-                boxShadow="md"
-                colorScheme="red"
-                variant="outline"
-              >
-                Clear
-              </Button>
-              <Tooltip label="Regenerate Response">
-                <IconButton
-                  aria-label="Regenerate"
-                  icon={<Icon as={FiRefreshCw} />}
-                  size="sm"
-                  boxShadow="md"
-                  onClick={onRegenerate}
-                />
-              </Tooltip>
-              <CopyButton onCopy={onCopy} size="sm" />
-            </HStack>
-          </Box>
-        </Box>
-      )}
-    </AnimatePresence>
-  );
+          Clear
+        </Button>
+        <Tooltip label="Regenerate Response">
+          <IconButton
+            aria-label="Regenerate"
+            icon={<Icon as={FiRefreshCw} />}
+            size="sm"
+            boxShadow="md"
+            onClick={onRegenerate}
+          />
+        </Tooltip>
+        <CopyButton onCopy={onCopy} size="sm" />
+      </HStack>
+    </Box>
+  ) : null;
 }
 
 export default ResponseBox;

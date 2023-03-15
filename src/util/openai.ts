@@ -110,6 +110,14 @@ async function chatComplete({
 }) {
   const res = await sendApiRequest(prompt, apiParams);
 
+  if (!res.ok) {
+    if (res.status === 401) {
+      throw new Error("Unauthorized");
+    }
+
+    throw new Error("Unknown error");
+  }
+
   if (!res.body) {
     throw new Error("No body");
   }
