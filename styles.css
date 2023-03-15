@@ -84,6 +84,12 @@ body {
   transform: translate(-50%, -50%);
 }
 
+@media (max-width: 768px) {
+  #cursor-glow {
+    display: none;
+  }
+}
+
 h1,
 h2,
 h3,
