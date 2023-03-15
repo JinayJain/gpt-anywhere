@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "GPT Anywhere",
-    "version": "0.0.0"
+    "version": "0.0.1"
   },
   "tauri": {
     "systemTray": {
@@ -50,7 +50,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "dev.jinay.slash-gpt",
+      "identifier": "dev.jinay.gpt-anywhere",
       "targets": "all"
     },
     "security": {
