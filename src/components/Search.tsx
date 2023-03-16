@@ -1,7 +1,21 @@
-import { Box, BoxProps, Button, HStack, Input } from "@chakra-ui/react";
+import {
+  Box,
+  BoxProps,
+  Button,
+  HStack,
+  Icon,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  InputLeftElement,
+  InputRightAddon,
+  InputRightElement,
+} from "@chakra-ui/react";
 import { listen } from "@tauri-apps/api/event";
 import { appWindow } from "@tauri-apps/api/window";
+import { GrDrag } from "react-icons/gr";
 import { useEffect, useRef, useState } from "react";
+import { DragHandleIcon, PhoneIcon } from "@chakra-ui/icons";
 
 function Search({
   onGenerate = () => {},
@@ -31,19 +45,26 @@ function Search({
         }}
       >
         <HStack>
-          <Input
-            ref={inputRef}
-            size="lg"
-            placeholder="Unleash your creativity"
-            onChange={(e) => setPrompt(e.target.value)}
-            value={prompt}
-            autoFocus
-            bg="blackAlpha.800"
-            _placeholder={{ color: "whiteAlpha.500" }}
-            onMouseDown={(e) => {
-              appWindow.startDragging();
-            }}
-          />
+          <InputGroup size="lg">
+            <Input
+              ref={inputRef}
+              placeholder="Unleash your creativity"
+              onChange={(e) => setPrompt(e.target.value)}
+              value={prompt}
+              autoFocus
+              bg="blackAlpha.800"
+              _placeholder={{ color: "whiteAlpha.500" }}
+            />
+            <InputRightElement
+              children={
+                <DragHandleIcon
+                  cursor="grab"
+                  color="whiteAlpha.500"
+                  data-tauri-drag-region
+                />
+              }
+            />
+          </InputGroup>
 
           <Button
             size="lg"
