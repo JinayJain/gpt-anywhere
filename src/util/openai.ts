@@ -1,6 +1,11 @@
 import { BaseDirectory, readTextFile } from "@tauri-apps/api/fs";
 import { CreateChatCompletionRequest } from "openai";
-import { SYSTEM_PROMPT, MAX_TOKENS, STORE_KEY } from "./consts";
+import {
+  SYSTEM_PROMPT,
+  DEFAULT_MAX_TOKENS,
+  STORE_KEY,
+  DEFAULT_TIMEOUT,
+} from "./consts";
 import store from "./store";
 
 type ApiParams = Omit<
@@ -32,17 +37,26 @@ async function processLine(line: string) {
   };
 }
 
-async function sendApiRequest(prompt: string, apiParams?: ApiParams) {
+async function sendApiRequest(
+  prompt: string,
+  controller: AbortController,
+  apiParams?: ApiParams
+) {
   // const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
-  const OPENAI_API_KEY = await store.get(STORE_KEY.API_KEY);
+  const apiKey = await store.get(STORE_KEY.API_KEY);
+  const max_tokens =
+    Number(await store.get(STORE_KEY.MAX_TOKENS)) || DEFAULT_MAX_TOKENS;
+
+  const { signal } = controller;
 
   return await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${OPENAI_API_KEY}`,
+      Authorization: `Bearer ${apiKey}`,
       Accept: "text/event-stream",
     },
+    signal,
     body: JSON.stringify({
       model: "gpt-3.5-turbo",
       messages: [
@@ -53,7 +67,7 @@ async function sendApiRequest(prompt: string, apiParams?: ApiParams) {
         { role: "user", content: prompt },
       ],
       stream: true,
-      max_tokens: MAX_TOKENS,
+      max_tokens,
       ...apiParams,
     }),
   });
@@ -108,7 +122,19 @@ async function chatComplete({
   onChunk: (message: string) => void;
   apiParams?: ApiParams;
 }) {
-  const res = await sendApiRequest(prompt, apiParams);
+  const controller = new AbortController();
+
+  console.log("sending request");
+
+  const timeoutSec =
+    Number(await store.get(STORE_KEY.TIMEOUT)) || DEFAULT_TIMEOUT;
+
+  const handle = setTimeout(() => {
+    console.log("timeout fired");
+    controller.abort();
+  }, timeoutSec * 1000);
+
+  const res = await sendApiRequest(prompt, controller, apiParams);
 
   if (!res.ok) {
     if (res.status === 401) {
@@ -123,7 +149,13 @@ async function chatComplete({
   }
 
   const reader = res.body.getReader();
-  return await processBody(reader, onChunk);
+
+  const handleChunk = (message: string) => {
+    clearTimeout(handle);
+    onChunk(message);
+  };
+
+  return await processBody(reader, handleChunk);
 }
 
 export { chatComplete };
