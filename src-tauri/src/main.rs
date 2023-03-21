@@ -1,6 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use gpt_anywhere::window::{WindowParams, HELP_WINDOW, MAIN_WINDOW, SETTINGS_WINDOW};
 use tauri::{
     CustomMenuItem, GlobalShortcutManager, Manager, SystemTray, SystemTrayMenu, SystemTrayMenuItem,
 };
@@ -13,6 +14,7 @@ fn build_system_tray() -> SystemTray {
     let sys_tray_menu = SystemTrayMenu::new()
         .add_item(CustomMenuItem::new("toggle_show", "Show/Hide"))
         .add_item(CustomMenuItem::new("settings", "Settings"))
+        .add_item(CustomMenuItem::new("help", "Help"))
         .add_native_item(SystemTrayMenuItem::Separator)
         .add_item(CustomMenuItem::new("quit", "Quit"));
 
@@ -24,8 +26,8 @@ fn handle_quit(app: &tauri::AppHandle) {
 }
 
 fn handle_show_hide(app: &tauri::AppHandle) {
-    let window = create_window_if_not_exist(app, "main", "Main", "index.html")
-        .unwrap_or(app.get_window("main").unwrap());
+    let window =
+        create_window_if_not_exist(app, MAIN_WINDOW).unwrap_or(app.get_window("main").unwrap());
 
     show_hide_window(&window);
 }
@@ -52,28 +54,30 @@ fn show_window(window: &tauri::Window) {
 
 #[tauri::command]
 fn open_settings(app: tauri::AppHandle) {
-    handle_settings(&app);
+    handle_popup(&app, SETTINGS_WINDOW);
 }
 
-fn handle_settings(app: &tauri::AppHandle) {
+fn handle_popup(app: &tauri::AppHandle, params: WindowParams) {
     // hide main window
     let window = app.get_window("main").unwrap();
     hide_window(&window);
 
-    create_window_if_not_exist(app, "settings", "Settings", "settings.html");
+    create_window_if_not_exist(app, params);
 }
 
 fn create_window_if_not_exist(
     app: &tauri::AppHandle,
-    label: &str,
-    title: &str,
-    url: &str,
+    params: WindowParams,
 ) -> Option<tauri::Window> {
-    if app.get_window(label).is_none() {
-        let window = tauri::WindowBuilder::new(app, label, tauri::WindowUrl::App(url.into()))
-            .title(title)
-            .center()
-            .build();
+    if app.get_window(params.label()).is_none() {
+        let window = tauri::WindowBuilder::new(
+            app,
+            params.label(),
+            tauri::WindowUrl::App(params.url().into()),
+        )
+        .title(params.title())
+        .center()
+        .build();
 
         window.ok()
     } else {
@@ -104,7 +108,8 @@ fn main() {
         .on_system_tray_event(|app, event| match event {
             tauri::SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                 "toggle_show" => handle_show_hide(app),
-                "settings" => handle_settings(app),
+                "settings" => handle_popup(app, SETTINGS_WINDOW),
+                "help" => handle_popup(app, HELP_WINDOW),
                 "quit" => handle_quit(app),
                 _ => (),
             },

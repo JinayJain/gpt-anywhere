@@ -65,7 +65,7 @@ function Settings() {
 
   return (
     <Box p={4}>
-      <Heading size="md" color="whiteAlpha.400" fontWeight="normal">
+      <Heading size="md" color="whiteAlpha.600" fontWeight="normal">
         GPT Anywhere
       </Heading>
       <Heading>Settings</Heading>

@@ -30,6 +30,8 @@ export default defineConfig({
         main: resolve(__dirname, "index.html"),
         // settings page
         settings: resolve(__dirname, "settings.html"),
+        // help page
+        help: resolve(__dirname, "help.html"),
       },
     },
   },

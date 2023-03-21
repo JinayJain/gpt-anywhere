@@ -2,7 +2,7 @@ import Search from "../components/Search";
 import { Box, Heading, Text } from "@chakra-ui/react";
 import ResponseBox from "../components/ResponseBox";
 import { useState } from "react";
-import { fillerMarkdown } from "../util/consts";
+import { fillerMarkdown, FIRST_LOAD_TEXT } from "../util/consts";
 import { chatComplete } from "../util/openai";
 import { AnimatePresence, motion } from "framer-motion";
 import UnauthorizedErrorBox from "../components/UnauthorizedErrorBox";
@@ -12,10 +12,11 @@ const CLEAR_TEXT = "";
 // const CLEAR_TEXT = fillerMarkdown;
 
 function App() {
-  const [response, setResponse] = useState(CLEAR_TEXT);
+  const [response, setResponse] = useState(FIRST_LOAD_TEXT);
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [lastPrompt, setLastPrompt] = useState("");
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   const [bgClicked, setBgClicked] = useState(false);
 

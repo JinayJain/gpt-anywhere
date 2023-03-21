@@ -15,7 +15,7 @@ import { listen } from "@tauri-apps/api/event";
 import { appWindow } from "@tauri-apps/api/window";
 import { GrDrag } from "react-icons/gr";
 import { useEffect, useRef, useState } from "react";
-import { DragHandleIcon, PhoneIcon } from "@chakra-ui/icons";
+import { DragHandleIcon, PhoneIcon, QuestionIcon } from "@chakra-ui/icons";
 
 function Search({
   onGenerate = () => {},

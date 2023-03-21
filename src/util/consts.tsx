@@ -16,6 +16,14 @@ export const STORE_KEY = {
   TIMEOUT: "timeout",
 };
 
+export const FIRST_LOAD_TEXT = `
+## Welcome to GPT Anywhere!
+
+Use the text box above to interact with GPT.  This window can be toggled at any time using the shortcut \`Ctrl+Shift+/\` or \`Cmd+Shift+/\` (on Mac).
+
+Before you get started, open the settings menu and enter your API key. You can get an API key from [OpenAI](https://platform.openai.com/account/api-keys).
+`;
+
 export const fillerMarkdown = `
 # Welcome to the React Markdown Previewer!
 
