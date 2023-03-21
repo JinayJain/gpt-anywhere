@@ -7,11 +7,22 @@ export const PROMPTS = {
 } as const;
 
 export const SYSTEM_PROMPT = PROMPTS.base;
-export const MAX_TOKENS = 300;
+export const DEFAULT_MAX_TOKENS = 1000;
+export const DEFAULT_TIMEOUT = 10;
 
 export const STORE_KEY = {
   API_KEY: "api_key",
+  MAX_TOKENS: "max_length",
+  TIMEOUT: "timeout",
 };
+
+export const FIRST_LOAD_TEXT = `
+## Welcome to GPT Anywhere!
+
+Use the text box above to interact with GPT.  This window can be toggled at any time using the shortcut \`Ctrl+Shift+/\` or \`Cmd+Shift+/\` (on Mac).
+
+Before you get started, open the settings menu and enter your API key. You can get an API key from [OpenAI](https://platform.openai.com/account/api-keys).
+`;
 
 export const fillerMarkdown = `
 # Welcome to the React Markdown Previewer!

@@ -2,19 +2,34 @@ import Search from "../components/Search";
 import { Box, Heading, Text } from "@chakra-ui/react";
 import ResponseBox from "../components/ResponseBox";
 import { useState } from "react";
-import { fillerMarkdown } from "../util/consts";
+import { fillerMarkdown, FIRST_LOAD_TEXT } from "../util/consts";
 import { chatComplete } from "../util/openai";
 import { AnimatePresence, motion } from "framer-motion";
 import UnauthorizedErrorBox from "../components/UnauthorizedErrorBox";
+import ErrorBox from "../components/ErrorBox";
 
 const CLEAR_TEXT = "";
 // const CLEAR_TEXT = fillerMarkdown;
 
 function App() {
-  const [response, setResponse] = useState(CLEAR_TEXT);
+  const [response, setResponse] = useState(FIRST_LOAD_TEXT);
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [lastPrompt, setLastPrompt] = useState("");
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
+
+  const [bgClicked, setBgClicked] = useState(false);
+
+  const handleBgClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+
+    setBgClicked(true);
+    setTimeout(() => {
+      setBgClicked(false);
+    }, 200);
+  };
 
   const handleGenerate = async (prompt: string, temperature = 1.0) => {
     setLastPrompt(prompt);
@@ -48,7 +63,15 @@ function App() {
   };
 
   return (
-    <Box display="flex" flexDirection="column" h="100vh">
+    <Box
+      display="flex"
+      flexDirection="column"
+      h="100vh"
+      bg={bgClicked ? "blackAlpha.300" : "none"}
+      onClick={handleBgClick}
+      transition="background-color 0.1s ease"
+      rounded="md"
+    >
       <Search onGenerate={handleGenerate} isLoading={isLoading} mb={4} />
 
       <AnimatePresence>
@@ -67,19 +90,7 @@ function App() {
               error.message === "Unauthorized" ? (
                 <UnauthorizedErrorBox />
               ) : (
-                <Box>
-                  <Heading size="sm">
-                    An error occurred while generating a response.
-                  </Heading>
-
-                  <Text>
-                    Please try again. If the problem persists, please{" "}
-                    <a href="https://github.com/jinayjain/gpt-anywhere/issues">
-                      open an issue
-                    </a>
-                    .
-                  </Text>
-                </Box>
+                <ErrorBox error={error} />
               )
             ) : (
               <ResponseBox
