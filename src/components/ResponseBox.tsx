@@ -113,35 +113,6 @@ function ResponseBox({
         pb={4}
         px={4}
       >
-        {/* <Tooltip label="Open Settings">
-          <IconButton
-            ml="auto"
-            aria-label="Regenerate"
-            icon={<Icon as={SettingsIcon} />}
-            size="sm"
-            boxShadow="md"
-            onClick={onSettings}
-          />
-        </Tooltip>
-        <Tooltip label="Regenerate Response">
-          <IconButton
-            aria-label="Regenerate"
-            icon={<Icon as={FiRefreshCw} />}
-            size="sm"
-            boxShadow="md"
-            onClick={onRegenerate}
-          />
-        </Tooltip>
-        <Button
-          onClick={onClear}
-          size="sm"
-          boxShadow="md"
-          colorScheme="red"
-          variant="outline"
-        >
-          Clear
-        </Button> */}
-
         <ToolbarButton
           label="Open Settings"
           icon={<Icon as={SettingsIcon} />}
