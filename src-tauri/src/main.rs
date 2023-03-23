@@ -52,7 +52,7 @@ fn show_window(window: &tauri::Window) {
     window.set_focus().unwrap();
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 fn open_settings(app: tauri::AppHandle) {
     handle_popup(&app, SETTINGS_WINDOW);
 }
