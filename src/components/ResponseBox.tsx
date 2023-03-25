@@ -28,6 +28,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import { NotAllowedIcon, SettingsIcon } from "@chakra-ui/icons";
 import { invoke } from "@tauri-apps/api";
+import ToolbarButton from "./ToolbarButton";
 
 const COPY_MSG_TIMEOUT = 1000;
 
@@ -51,52 +52,21 @@ function Debug({ text }: { text: string }) {
   );
 }
 
-const ToolbarButton = ({
-  label,
-  icon,
-  onClick,
-  ...props
-}: {
-  label: string;
-  icon: React.ReactNode;
-  onClick: () => void;
-} & Omit<IconButtonProps, "aria-label">) => {
-  return (
-    <Tooltip label={label}>
-      <IconButton
-        ml="auto"
-        aria-label={label}
-        icon={icon}
-        size="sm"
-        boxShadow="md"
-        onClick={onClick}
-        {...props}
-      />
-    </Tooltip>
-  );
-};
-
 function ResponseBox({
   responseMarkdown,
-  onClear,
   onRegenerate,
   ...props
 }: {
-  onClear: () => void;
-  onRegenerate: () => void;
+  onRegenerate?: () => void;
   responseMarkdown: string;
 } & BoxProps) {
   const onCopy = () => {
     writeText(responseMarkdown);
   };
 
-  const onSettings = () => {
-    invoke("open_settings");
-  };
-
-  return responseMarkdown ? (
-    <Box {...props}>
-      <Box px={4} py={4} overflowY="auto" flex={1}>
+  return (
+    <Box bg="blackAlpha.800" rounded="md" overflow="hidden" {...props}>
+      <Box px={4} py={4} flex={1}>
         <ReactMarkdown
           remarkPlugins={[remarkBreaks, remarkMath]}
           rehypePlugins={[rehypeKatex]}
@@ -105,38 +75,21 @@ function ResponseBox({
         />
       </Box>
 
-      <HStack
-        position="sticky"
-        bottom={0}
-        right={0}
-        bg="linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1.0))"
-        pb={4}
-        px={4}
-      >
-        <ToolbarButton
-          label="Open Settings"
-          icon={<Icon as={SettingsIcon} />}
-          onClick={onSettings}
-        />
+      <Box position="sticky" bottom={0} right={0} pb={4} px={4}>
+        <HStack ml="auto">
+          {onRegenerate && (
+            <ToolbarButton
+              label="Regenerate Response"
+              icon={<Icon as={FiRefreshCw} />}
+              onClick={onRegenerate}
+            />
+          )}
 
-        <ToolbarButton
-          label="Regenerate Response"
-          icon={<Icon as={FiRefreshCw} />}
-          onClick={onRegenerate}
-        />
-
-        <ToolbarButton
-          label="Clear Response"
-          icon={<Icon as={NotAllowedIcon} />}
-          colorScheme="red"
-          variant="outline"
-          onClick={onClear}
-        />
-
-        <CopyButton onCopy={onCopy} size="sm" />
-      </HStack>
+          <CopyButton onCopy={onCopy} size="sm" />
+        </HStack>
+      </Box>
     </Box>
-  ) : null;
+  );
 }
 
 export default ResponseBox;

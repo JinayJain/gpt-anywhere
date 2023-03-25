@@ -100,7 +100,7 @@ function Settings() {
           </FormHelperText>
           <HStack spacing={4}>
             <Slider
-              aria-label="slider-ex-1"
+              aria-label="response-timeout"
               value={timeout ?? 0}
               onChange={(value) => setTimeout(value)}
               max={120}
@@ -139,11 +139,11 @@ function Settings() {
           </FormHelperText>
           <HStack spacing={4}>
             <Slider
-              aria-label="slider-ex-1"
+              aria-label="max-tokens"
               value={maxTokens ?? 0}
               onChange={(value) => setMaxTokens(value)}
-              max={2048}
-              step={1}
+              max={4096}
+              step={100}
               focusThumbOnChange={false}
             >
               <SliderTrack>

@@ -6,6 +6,7 @@ import {
   STORE_KEY,
   DEFAULT_TIMEOUT,
 } from "./consts";
+import { ChatMessage } from "./hooks/useChatLog";
 import store from "./store";
 
 type ApiParams = Omit<
@@ -38,7 +39,7 @@ async function processLine(line: string) {
 }
 
 async function sendApiRequest(
-  prompt: string,
+  chat: ChatMessage[],
   controller: AbortController,
   apiParams?: ApiParams
 ) {
@@ -48,6 +49,12 @@ async function sendApiRequest(
     Number(await store.get(STORE_KEY.MAX_TOKENS)) || DEFAULT_MAX_TOKENS;
 
   const { signal } = controller;
+
+  const apiChat = chat.map((msg) => ({
+    role: msg.type === "prompt" ? "user" : "system",
+    // TypeScript doesn't infer that msg isn't an error
+    content: msg.text,
+  }));
 
   return await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
@@ -64,7 +71,7 @@ async function sendApiRequest(
           role: "system",
           content: SYSTEM_PROMPT,
         },
-        { role: "user", content: prompt },
+        ...apiChat,
       ],
       stream: true,
       max_tokens,
@@ -114,11 +121,11 @@ async function processBody(
 }
 
 async function chatComplete({
-  prompt,
+  chat,
   onChunk,
   apiParams,
 }: {
-  prompt: string;
+  chat: ChatMessage[];
   onChunk: (message: string) => void;
   apiParams?: ApiParams;
 }) {
@@ -134,7 +141,7 @@ async function chatComplete({
     controller.abort();
   }, timeoutSec * 1000);
 
-  const res = await sendApiRequest(prompt, controller, apiParams);
+  const res = await sendApiRequest(chat, controller, apiParams);
 
   if (!res.ok) {
     if (res.status === 401) {

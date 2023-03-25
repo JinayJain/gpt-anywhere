@@ -1,6 +1,7 @@
 import {
   Box,
   BoxProps,
+  Button,
   Collapse,
   HStack,
   Icon,
@@ -23,7 +24,11 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
   DragHandleIcon,
+  NotAllowedIcon,
+  SettingsIcon,
 } from "@chakra-ui/icons";
+import { invoke } from "@tauri-apps/api";
+import ToolbarButton from "./ToolbarButton";
 
 const TEMPERATURE_GRADES = [
   {
@@ -54,10 +59,12 @@ const TEMPERATURE_GRADES = [
 
 function Search({
   onGenerate = () => {},
+  onClear = () => {},
   isLoading = false,
   ...props
 }: {
   onGenerate?: (prompt: string, temperature: number) => void;
+  onClear?: () => void;
   isLoading?: boolean;
 } & BoxProps) {
   const [prompt, setPrompt] = useState("");
@@ -80,13 +87,17 @@ function Search({
     };
   }, []);
 
+  const onSettings = () => {
+    invoke("open_settings");
+  };
+
   return (
     <Box display="flex" flexDirection="column" {...props}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          console.log("GENERATING Prompt");
-          onGenerate(prompt, temperature);
+          onGenerate(prompt.trim(), temperature);
+          setPrompt("");
         }}
       >
         <HStack>
@@ -121,13 +132,15 @@ function Search({
             />
           </Tooltip>
 
-          <IconButton
-            size="lg"
-            colorScheme="green"
-            aria-label="Options"
-            icon={showOptions ? <ChevronUpIcon /> : <ChevronDownIcon />}
-            onClick={() => setShowOptions(!showOptions)}
-          />
+          <Tooltip label="Options" aria-label="Options" hasArrow>
+            <IconButton
+              size="lg"
+              colorScheme="green"
+              aria-label="Options"
+              icon={showOptions ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              onClick={() => setShowOptions(!showOptions)}
+            />
+          </Tooltip>
         </HStack>
       </form>
 
@@ -145,6 +158,7 @@ function Search({
               onMouseEnter={() => setShowTooltip(true)}
               onMouseLeave={() => setShowTooltip(false)}
               colorScheme="red"
+              flex={1}
             >
               <SliderTrack>
                 <SliderFilledTrack />
@@ -160,6 +174,26 @@ function Search({
             <Text w={24} align="center">
               {temperatureLabel || temperature}
             </Text>
+
+            <Button
+              leftIcon={<Icon as={SettingsIcon} />}
+              colorScheme="green"
+              variant="outline"
+              onClick={onSettings}
+              size="sm"
+            >
+              Settings
+            </Button>
+
+            <Button
+              leftIcon={<Icon as={NotAllowedIcon} />}
+              colorScheme="red"
+              variant="outline"
+              onClick={onClear}
+              size="sm"
+            >
+              Clear
+            </Button>
           </HStack>
         </Box>
       </Collapse>

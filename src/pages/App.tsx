@@ -1,24 +1,23 @@
 import Search from "../components/Search";
-import { Box, Heading, Text } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import ResponseBox from "../components/ResponseBox";
 import { useState } from "react";
-import { fillerMarkdown, FIRST_LOAD_TEXT } from "../util/consts";
 import { chatComplete } from "../util/openai";
 import { AnimatePresence, motion } from "framer-motion";
 import UnauthorizedErrorBox from "../components/UnauthorizedErrorBox";
 import ErrorBox from "../components/ErrorBox";
+import PromptBox from "../components/PromptBox";
+import useChatLog, { ChatMessage } from "../util/hooks/useChatLog";
 
 const CLEAR_TEXT = "";
 // const CLEAR_TEXT = fillerMarkdown;
 
 function App() {
-  const [response, setResponse] = useState(FIRST_LOAD_TEXT);
-  const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [lastPrompt, setLastPrompt] = useState("");
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
-
   const [bgClicked, setBgClicked] = useState(false);
+  const { chatLog, addPrompt, addResponse, clearChatLog } = useChatLog();
+  const [error, setError] = useState<Error | null>(null);
 
   const handleBgClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target !== e.currentTarget) {
@@ -32,29 +31,30 @@ function App() {
   };
 
   const handleGenerate = async (prompt: string, temperature = 1.0) => {
-    setLastPrompt(prompt);
-
     if (prompt) {
+      const chatHistory: ChatMessage[] = [
+        ...chatLog,
+        { type: "prompt", text: prompt },
+      ];
+
+      addPrompt(prompt);
       setError(null);
       setIsLoading(true);
 
       try {
-        setResponse(CLEAR_TEXT);
-
-        await chatComplete({
-          prompt,
-          onChunk(chunk) {
-            setResponse((prev) => prev + chunk);
-          },
+        const response = await chatComplete({
+          chat: chatHistory,
+          onChunk(chunk) {},
           apiParams: {
             temperature,
           },
         });
+
+        addResponse(response);
       } catch (e) {
         if (e instanceof Error) {
           setError(e);
         }
-
         console.log(e);
       }
 
@@ -72,36 +72,52 @@ function App() {
       transition="background-color 0.1s ease"
       rounded="md"
     >
-      <Search onGenerate={handleGenerate} isLoading={isLoading} mb={2} />
+      <Search
+        onGenerate={handleGenerate}
+        onClear={clearChatLog}
+        isLoading={isLoading}
+        mb={2}
+      />
 
-      <AnimatePresence>
-        {(error || response) && (
-          <Box
-            as={motion.div}
-            bg="blackAlpha.800"
-            borderRadius="md"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            maxH="100%"
-            overflow="auto"
-          >
-            {error ? (
-              error.message === "Unauthorized" ? (
+      <Box overflowY="auto" maxH="100%">
+        <AnimatePresence>
+          {error && (
+            <Box
+              as={motion.div}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              mb={2}
+              rounded="md"
+              overflow="hidden"
+              background="blackAlpha.800"
+            >
+              {error.message === "Unauthorized" ? (
                 <UnauthorizedErrorBox />
               ) : (
                 <ErrorBox error={error} />
-              )
-            ) : (
-              <ResponseBox
-                onClear={() => setResponse(CLEAR_TEXT)}
-                onRegenerate={() => handleGenerate(lastPrompt, 1.5)}
-                responseMarkdown={response}
-              />
-            )}
-          </Box>
-        )}
-      </AnimatePresence>
+              )}
+            </Box>
+          )}
+
+          {[...chatLog].reverse().map((message, i) => (
+            <Box
+              key={i}
+              as={motion.div}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              mt={i === 0 ? 0 : 2}
+            >
+              {message.type === "prompt" ? (
+                <PromptBox prompt={message.text} />
+              ) : (
+                <ResponseBox responseMarkdown={message.text} />
+              )}
+            </Box>
+          ))}
+        </AnimatePresence>
+      </Box>
     </Box>
   );
 }
