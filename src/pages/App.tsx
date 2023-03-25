@@ -72,7 +72,7 @@ function App() {
       transition="background-color 0.1s ease"
       rounded="md"
     >
-      <Search onGenerate={handleGenerate} isLoading={isLoading} mb={4} />
+      <Search onGenerate={handleGenerate} isLoading={isLoading} mb={2} />
 
       <AnimatePresence>
         {(error || response) && (
