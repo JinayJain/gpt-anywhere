@@ -65,8 +65,8 @@ function ResponseBox({
   };
 
   return (
-    <Box bg="blackAlpha.800" rounded="md" overflow="hidden" {...props}>
-      <Box px={4} py={4} flex={1}>
+    <Stack bg="blackAlpha.800" rounded="md" p={4} {...props}>
+      <Box>
         <ReactMarkdown
           remarkPlugins={[remarkBreaks, remarkMath]}
           rehypePlugins={[rehypeKatex]}
@@ -75,20 +75,18 @@ function ResponseBox({
         />
       </Box>
 
-      <Box position="sticky" bottom={0} right={0} pb={4} px={4}>
-        <HStack ml="auto">
-          {onRegenerate && (
-            <ToolbarButton
-              label="Regenerate Response"
-              icon={<Icon as={FiRefreshCw} />}
-              onClick={onRegenerate}
-            />
-          )}
+      <Box alignSelf="flex-end">
+        {onRegenerate && (
+          <ToolbarButton
+            label="Regenerate Response"
+            icon={<Icon as={FiRefreshCw} />}
+            onClick={onRegenerate}
+          />
+        )}
 
-          <CopyButton onCopy={onCopy} size="sm" />
-        </HStack>
+        <CopyButton onCopy={onCopy} size="sm" />
       </Box>
-    </Box>
+    </Stack>
   );
 }
 

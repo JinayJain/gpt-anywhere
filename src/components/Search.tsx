@@ -185,15 +185,15 @@ function Search({
               Settings
             </Button>
 
-            <Button
+            {/* <Button
               leftIcon={<Icon as={NotAllowedIcon} />}
               colorScheme="red"
               variant="outline"
               onClick={onClear}
               size="sm"
             >
-              Clear
-            </Button>
+              Clear Chat
+            </Button> */}
           </HStack>
         </Box>
       </Collapse>

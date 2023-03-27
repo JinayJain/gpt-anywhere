@@ -1,5 +1,5 @@
 import Search from "../components/Search";
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, Center } from "@chakra-ui/react";
 import ResponseBox from "../components/ResponseBox";
 import { useState } from "react";
 import { chatComplete } from "../util/openai";
@@ -8,13 +8,13 @@ import UnauthorizedErrorBox from "../components/UnauthorizedErrorBox";
 import ErrorBox from "../components/ErrorBox";
 import PromptBox from "../components/PromptBox";
 import useChatLog, { ChatMessage } from "../util/hooks/useChatLog";
+import { NotAllowedIcon, RepeatIcon } from "@chakra-ui/icons";
 
 const CLEAR_TEXT = "";
 // const CLEAR_TEXT = fillerMarkdown;
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
-  const [lastPrompt, setLastPrompt] = useState("");
   const [bgClicked, setBgClicked] = useState(false);
   const { chatLog, addPrompt, addResponse, clearChatLog } = useChatLog();
   const [error, setError] = useState<Error | null>(null);
@@ -100,22 +100,43 @@ function App() {
             </Box>
           )}
 
-          {[...chatLog].reverse().map((message, i) => (
-            <Box
-              key={i}
+          {[...chatLog]
+            .map((message, i) => (
+              <Box
+                key={i}
+                as={motion.div}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                mt={i === chatLog.length - 1 ? 0 : 2}
+              >
+                {message.type === "prompt" ? (
+                  <PromptBox prompt={message.text} />
+                ) : (
+                  <ResponseBox responseMarkdown={message.text} />
+                )}
+              </Box>
+            ))
+            .reverse()}
+
+          {chatLog.length > 0 && (
+            <Center
               as={motion.div}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              mt={i === 0 ? 0 : 2}
+              mt={2}
             >
-              {message.type === "prompt" ? (
-                <PromptBox prompt={message.text} />
-              ) : (
-                <ResponseBox responseMarkdown={message.text} />
-              )}
-            </Box>
-          ))}
+              <Button
+                size="sm"
+                leftIcon={<NotAllowedIcon />}
+                onClick={clearChatLog}
+                colorScheme="red"
+              >
+                Reset Chat
+              </Button>
+            </Center>
+          )}
         </AnimatePresence>
       </Box>
     </Box>
