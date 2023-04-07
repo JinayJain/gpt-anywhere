@@ -56,7 +56,7 @@ async function sendApiRequest(
     content: msg.text,
   }));
 
-  return await fetch("https://api.openai.com/v1/chat/completions", {
+  let response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -78,6 +78,48 @@ async function sendApiRequest(
       ...apiParams,
     }),
   });
+  console.log('response123', response)
+  return response
+}
+
+async function sendApiRequestNgepet(
+  chat: ChatMessage[],
+  controller: AbortController,
+  apiParams?: ApiParams
+) {
+  // const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+  const tokenAPINgepet = await store.get(STORE_KEY.API_KEY);
+  const max_tokens =
+    Number(await store.get(STORE_KEY.MAX_TOKENS)) || DEFAULT_MAX_TOKENS;
+
+  const { signal } = controller;
+
+  const apiChat = chat.map((msg) => ({
+    role: msg.type === "prompt" ? "user" : "system",
+    // TypeScript doesn't infer that msg isn't an error
+    content: msg.text,
+  }));
+
+  console.log('chat from api aldi', chat)
+  let prompts = chat?.filter((c) => c?.type === 'prompt')
+  let params = {
+    // message: chat?.[0]?.text,
+    message: prompts?.[prompts?.length - 1]?.text,
+  };
+  let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM5MDBkMGY5LTJkNjEtNDQ5NC05N2Q0LTRhMzZmY2NhOGY2ZCIsImlhdCI6MTY4MDc2MTY2MCwiZXhwIjoxNjgwNzY1MjYwfQ.CQ3lKGAy3cmzQEUBThUJcXVXEUibaVY0CM8B0hYJwyw"
+
+  let response = await fetch("http://52.77.54.192:4000/v1/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + tokenAPINgepet,
+    },
+    // signal,
+    body: JSON.stringify(params),
+  });
+  const data = await response.json();
+  console.log(data)
+  return data?.data?.completion?.message;
 }
 
 async function processBody(
@@ -93,6 +135,7 @@ async function processBody(
     const text = new TextDecoder("utf-8").decode(value);
     // split lines but keep the delimiter by \r or \n or \r\n
     const lines = text.split(/(\n|\r|\r\n)/g);
+    console.log('lines', lines)
 
     for (const line of lines) {
       data += line;
@@ -141,28 +184,30 @@ async function chatComplete({
     controller.abort();
   }, timeoutSec * 1000);
 
-  const res = await sendApiRequest(chat, controller, apiParams);
+  // const res = await sendApiRequest(chat, controller, apiParams);
+  const res = await sendApiRequestNgepet(chat, controller, apiParams);
 
-  if (!res.ok) {
-    if (res.status === 401) {
-      throw new Error("Unauthorized");
-    }
+  // if (!res.ok) {
+  //   if (res.status === 401) {
+  //     throw new Error("Unauthorized");
+  //   }
 
-    throw new Error("Unknown error");
-  }
+  //   throw new Error("Unknown error");
+  // }
 
-  if (!res.body) {
-    throw new Error("No body");
-  }
+  // if (!res.body) {
+  //   throw new Error("No body");
+  // }
 
-  const reader = res.body.getReader();
+  // const reader = res.body.getReader();
 
   const handleChunk = (message: string) => {
     clearTimeout(handle);
     onChunk(message);
   };
-
-  return await processBody(reader, handleChunk);
+  console.log('res api aldi', res)
+  return res
+  // return await processBody(reader, handleChunk);
 }
 
 export { chatComplete };

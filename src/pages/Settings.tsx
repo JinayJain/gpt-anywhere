@@ -66,13 +66,14 @@ function Settings() {
   return (
     <Box p={4}>
       <Heading size="md" color="whiteAlpha.600" fontWeight="normal">
-        GPT Anywhere
+        nGePeT Dimana mana
       </Heading>
       <Heading>Settings</Heading>
 
       <Stack mt={4} spacing={4}>
         <FormControl>
-          <FormLabel>OpenAI API Key</FormLabel>
+          {/* <FormLabel>OpenAI API Key</FormLabel> */}
+          <FormLabel>Token Auth Login</FormLabel>
           <Input
             type="password"
             placeholder="sk-..."
