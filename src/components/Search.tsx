@@ -28,7 +28,18 @@ import {
   SettingsIcon,
 } from "@chakra-ui/icons";
 import { invoke } from "@tauri-apps/api";
+import { Mention, MentionsInput, SuggestionDataItem } from "react-mentions";
 import ToolbarButton from "./ToolbarButton";
+
+const inputStyle = {
+  border: "1px solid #ccc",
+  borderRadius: "5px",
+  padding: "8px",
+  // fontSize: "14px",
+  // outline: "none",
+  backgroundColor: "black",
+  width: "100%",
+};
 
 const TEMPERATURE_GRADES = [
   {
@@ -71,11 +82,45 @@ function Search({
   const [temperature, setTemperature] = useState(1.0);
   const [showOptions, setShowOptions] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<any>(null);
 
   const temperatureLabel = TEMPERATURE_GRADES.find(
     (grade) => grade.value <= temperature
   )?.label;
+
+  const users = [
+    { id: 1, display: "File Gdrive", value: "file gdrive bla bla" },
+    { id: 2, display: "File 2", value: "file gdrive bla bla 2" },
+    { id: 3, display: "File 3", value: "file gdrive bla bla 3" },
+  ];
+
+  const [valueInput, setValueInput] = useState<string>();
+  interface User {
+    id: number;
+    display: string;
+  }
+
+  const searchUsers = (
+    query: string,
+    callback: (users: User[]) => void
+  ): void => {
+    const filteredUsers = users.filter((user) =>
+      user.display.toLowerCase().includes(query.toLowerCase())
+    );
+    callback(filteredUsers);
+  };
+
+  const handleChange = (
+    event: { target: { value: string } },
+    newValue: string,
+    newPlainTextValue: string,
+    mentions: any[]
+  ): void => {
+    setValueInput(event?.target?.value);
+    setPrompt(event?.target?.value);
+  };
+
+  console.log("Value changedaa:", valueInput);
 
   useEffect(() => {
     const unlisten = listen("show", (e) => {
@@ -102,7 +147,7 @@ function Search({
       >
         <HStack>
           <InputGroup size="lg">
-            <Input
+            {/* <Input
               ref={inputRef}
               placeholder="Unleash your creativity"
               onChange={(e) => setPrompt(e.target.value)}
@@ -110,7 +155,39 @@ function Search({
               autoFocus
               bg="blackAlpha.800"
               _placeholder={{ color: "whiteAlpha.500" }}
-            />
+            /> */}
+            <MentionsInput
+              ref={inputRef}
+              value={prompt}
+              onChange={handleChange}
+              style={inputStyle}
+              autoFocus
+              placeholder="Type '//' to show syntax..."
+            >
+              <Mention
+                trigger="//"
+                data={searchUsers}
+                markup={"//__display__"}
+                renderSuggestion={(
+                  suggestion: SuggestionDataItem,
+                  search: string,
+                  highlightedDisplay: React.ReactNode,
+                  index: number,
+                  focused: boolean
+                ) => (
+                  <div
+                    className={`user-suggestion${focused ? " focused" : ""}`}
+                    style={
+                      focused
+                        ? { color: "white", background: "teal", padding: "5px" }
+                        : { color: "black", padding: "5px" }
+                    }
+                  >
+                    {highlightedDisplay}
+                  </div>
+                )}
+              />
+            </MentionsInput>
             <InputRightElement
               children={
                 <DragHandleIcon
