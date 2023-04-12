@@ -30,15 +30,29 @@ import {
 import { invoke } from "@tauri-apps/api";
 import { Mention, MentionsInput, SuggestionDataItem } from "react-mentions";
 import ToolbarButton from "./ToolbarButton";
+import store from "../util/store";
+import { STORE_KEY } from "../util/consts";
 
 const inputStyle = {
   border: "1px solid #ccc",
   borderRadius: "5px",
   padding: "8px",
-  // fontSize: "14px",
+  // fontSize: "16px",
   // outline: "none",
   backgroundColor: "black",
   width: "100%",
+  input: {
+    padding: "8px",
+  },
+};
+
+const mentionStyle = {
+  backgroundColor: "#d4eaff",
+  color: "black",
+};
+const mentionStyle2 = {
+  backgroundColor: "yellow",
+  color: "black",
 };
 
 const TEMPERATURE_GRADES = [
@@ -82,32 +96,87 @@ function Search({
   const [temperature, setTemperature] = useState(1.0);
   const [showOptions, setShowOptions] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [listUsers, setListUsers] = useState<User[]>([]);
+
   const inputRef = useRef<any>(null);
 
   const temperatureLabel = TEMPERATURE_GRADES.find(
     (grade) => grade.value <= temperature
   )?.label;
 
-  const users = [
-    { id: 1, display: "File Gdrive", value: "file gdrive bla bla" },
-    { id: 2, display: "File 2", value: "file gdrive bla bla 2" },
-    { id: 3, display: "File 3", value: "file gdrive bla bla 3" },
+  // fetch user
+  async function fetchUsers() {
+    const tokenAPINgepet = await store.get(STORE_KEY.API_KEY);
+    console.log("masuuk");
+    // Construct the URL
+    const url = `http://52.77.54.192:4000/v1/organizations/51d11458-e9ac-453b-9d9d-ff31498c550d/users`;
+
+    try {
+      // Perform the GET request
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + tokenAPINgepet,
+        },
+      });
+
+      // Check if the request was successful
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+
+      // Parse and return the JSON response
+      const data = await response.json();
+      setListUsers(
+        data?.data?.docs?.map((user: { name: String; id: String }) => {
+          return { id: user?.id, display: user?.name };
+        }) ?? []
+      );
+      // return data;
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      setListUsers([]);
+      throw error;
+    }
+  }
+
+  const files = [
+    { id: "123232", display: "File Gdrive" },
+    { id: "4343423423", display: "File 2" },
+    { id: "5454545", display: "File 3" },
   ];
 
   const [valueInput, setValueInput] = useState<string>();
   interface User {
-    id: number;
+    id: string | number;
     display: string;
+    [key: string]: any;
+  }
+  interface File {
+    id: string | number;
+    display: string;
+    [key: string]: any;
   }
 
   const searchUsers = (
     query: string,
     callback: (users: User[]) => void
   ): void => {
-    const filteredUsers = users.filter((user) =>
+    const filteredUsers = listUsers.filter((user) =>
       user.display.toLowerCase().includes(query.toLowerCase())
     );
     callback(filteredUsers);
+  };
+
+  const searchFiles = (
+    query: string,
+    callback: (files: File[]) => void
+  ): void => {
+    const filteredFiles = files.filter((file) =>
+      file.display.toLowerCase().includes(query.toLowerCase())
+    );
+    callback(filteredFiles);
   };
 
   const handleChange = (
@@ -136,6 +205,14 @@ function Search({
     invoke("open_settings");
   };
 
+  const inputRef2 = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (inputRef2.current) {
+      inputRef2.current.style.setProperty("height", "auto", "important");
+    }
+  }, []);
+
   return (
     <Box display="flex" flexDirection="column" {...props}>
       <form
@@ -162,12 +239,40 @@ function Search({
               onChange={handleChange}
               style={inputStyle}
               autoFocus
-              placeholder="Type '//' to show syntax..."
+              placeholder="Type # or @ to show syntax..."
+              onFocus={fetchUsers}
             >
               <Mention
-                trigger="//"
+                trigger="@"
                 data={searchUsers}
-                markup={"//__display__"}
+                markup={"@__display__[__id__]"}
+                style={mentionStyle}
+                displayTransform={(id, display) => `@${display}${id}`}
+                renderSuggestion={(
+                  suggestion: SuggestionDataItem,
+                  search: string,
+                  highlightedDisplay: React.ReactNode,
+                  index: number,
+                  focused: boolean
+                ) => (
+                  <div
+                    className={`user-suggestion${focused ? " focused" : ""}`}
+                    style={
+                      focused
+                        ? { color: "white", background: "teal", padding: "5px" }
+                        : { color: "black", padding: "5px" }
+                    }
+                  >
+                    {highlightedDisplay}
+                  </div>
+                )}
+              />
+              <Mention
+                trigger="#"
+                data={searchFiles}
+                markup={"#__display__[__id__]"}
+                style={mentionStyle2}
+                displayTransform={(id, display) => `#${display}${id}`}
                 renderSuggestion={(
                   suggestion: SuggestionDataItem,
                   search: string,

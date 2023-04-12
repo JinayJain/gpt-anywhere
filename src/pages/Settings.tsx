@@ -29,7 +29,20 @@ import store from "../util/store";
 function Settings() {
   const toast = useToast();
   const [apiKey, setApiKey] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
+  const [password, setPassword] = useState<string | null>(null);
   const [timeout, setTimeout] = useState<number | null>(null);
+  const [isFilled, setIsFilled] = useState(false);
+  const [loadingLogin, setLoadingLogin] = useState(false);
+  const [msgError, setMsgError] = useState<string | null>(null);
+
+  const toggleIsFilled = () => {
+    setIsFilled(true);
+    window.setTimeout(() => {
+      setIsFilled(false);
+    }, 3000);
+  };
+
   const [maxTokens, setMaxTokens] = useState<number | null>(null);
 
   useEffect(() => {
@@ -45,6 +58,45 @@ function Settings() {
 
     populateFields();
   }, []);
+
+  async function handleLogin(): Promise<void> {
+    if (!username || username === "" || !password || password === "")
+      toggleIsFilled();
+    setLoadingLogin(true);
+    const response = await fetch("http://52.77.54.192:4000/v1/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log("Login successful:", data.data);
+      await store.set(STORE_KEY.API_KEY, data.data.accessToken);
+      await store.set(STORE_KEY.USER, data.data.user);
+      await store.save();
+
+      toast({
+        title: "Login Success",
+        description: "Your login have been success.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else {
+      console.error("Login failed:", response.status);
+      if (response.status === 401) {
+        toggleIsFilled();
+        setMsgError("Username or password invalid");
+      }
+    }
+    setLoadingLogin(false);
+  }
 
   const handleSave = async () => {
     if (!apiKey) return;
@@ -73,27 +125,49 @@ function Settings() {
       <Stack mt={4} spacing={4}>
         <FormControl>
           {/* <FormLabel>OpenAI API Key</FormLabel> */}
-          <FormLabel>Token Auth Login</FormLabel>
+          <FormLabel>Login to get acces to this apps</FormLabel>
           <Input
+            mt={4}
+            type="username"
+            placeholder="Username..."
+            value={username || ""}
+            onChange={(e) => setUsername(e.target.value)}
+            isRequired
+          />
+          <Input
+            mt={4}
+            type="password"
+            placeholder="Password..."
+            value={password || ""}
+            onChange={(e) => setPassword(e.target.value)}
+            isRequired
+          />
+          {/* <Input
             type="password"
             placeholder="sk-..."
             value={apiKey || ""}
             onChange={(e) => setApiKey(e.target.value)}
             isRequired
-          />
-          <FormHelperText>
-            You can generate an API key on{" "}
-            <Link
+          /> */}
+          {isFilled ? (
+            <FormHelperText color={"red.400"}>
+              {msgError ? msgError : "Username or password must be filled"}
+              {/* <Link
               href="https://platform.openai.com/account/api-keys"
               isExternal
               color="blue.400"
             >
               OpenAI's website
-            </Link>
-          </FormHelperText>
+            </Link> */}
+            </FormHelperText>
+          ) : null}
         </FormControl>
 
         <FormControl>
+          <Button onClick={handleLogin} isLoading={loadingLogin}>Login</Button>
+        </FormControl>
+
+        {/* <FormControl>
           <FormLabel>Timeout</FormLabel>
           <FormHelperText>
             The maximum time (in seconds) to wait for a response from the OpenAI
@@ -170,16 +244,16 @@ function Settings() {
               </NumberInputStepper>
             </NumberInput>
           </HStack>
-        </FormControl>
+        </FormControl> */}
 
-        <Button
+        {/* <Button
           type="submit"
           colorScheme="blue"
           alignSelf="flex-end"
           onClick={handleSave}
         >
           Save
-        </Button>
+        </Button> */}
       </Stack>
     </Box>
   );

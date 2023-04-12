@@ -89,6 +89,9 @@ async function sendApiRequestNgepet(
 ) {
   // const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
   const tokenAPINgepet = await store.get(STORE_KEY.API_KEY);
+  const userDetails = await store.get(STORE_KEY.USER);
+  console.log('tokenAPINgepet', tokenAPINgepet)
+  console.log('userDetails', userDetails)
   const max_tokens =
     Number(await store.get(STORE_KEY.MAX_TOKENS)) || DEFAULT_MAX_TOKENS;
 
@@ -118,8 +121,7 @@ async function sendApiRequestNgepet(
     body: JSON.stringify(params),
   });
   const data = await response.json();
-  console.log(data)
-  return data?.data?.completion?.message;
+  return data;
 }
 
 async function processBody(
@@ -186,27 +188,27 @@ async function chatComplete({
 
   // const res = await sendApiRequest(chat, controller, apiParams);
   const res = await sendApiRequestNgepet(chat, controller, apiParams);
+  console.log('res api aldi', res)
 
-  // if (!res.ok) {
-  //   if (res.status === 401) {
-  //     throw new Error("Unauthorized");
-  //   }
+  if (res) {
+    if (res.statusCode === 401) {
+      throw new Error("Unauthorized");
+    }
 
-  //   throw new Error("Unknown error");
-  // }
+    throw new Error("Unknown error");
+  }
 
-  // if (!res.body) {
-  //   throw new Error("No body");
-  // }
+  if (!res?.data?.completion?.message) {
+    throw new Error("Error");
+  }
 
   // const reader = res.body.getReader();
 
-  const handleChunk = (message: string) => {
-    clearTimeout(handle);
-    onChunk(message);
-  };
-  console.log('res api aldi', res)
-  return res
+  // const handleChunk = (message: string) => {
+  //   clearTimeout(handle);
+  //   onChunk(message);
+  // };
+  return res?.data?.completion?.message
   // return await processBody(reader, handleChunk);
 }
 

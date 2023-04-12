@@ -4,9 +4,9 @@ import { invoke } from "@tauri-apps/api";
 function UnauthorizedErrorBox() {
   return (
     <Stack p={4}>
-      <Heading size="sm">Invalid API Key</Heading>
+      <Heading size="sm">Invalid Token API Key</Heading>
       <Text>
-        Please make sure you have set your OpenAI API key in the settings.
+        Please make sure you have set your Token API key in the settings.
       </Text>
       <Button
         alignSelf="start"

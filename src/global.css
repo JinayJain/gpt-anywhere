@@ -1,11 +1,21 @@
 html,
 body {
-    height: 100%;
-    overflow: hidden;
+  height: 100%;
+  overflow: hidden;
 
-    background-color: transparent;
+  background-color: transparent;
 }
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.user-suggestion {
+  padding: 5px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.user-suggestion.focused {
+  background-color: #b3d4fc;
 }

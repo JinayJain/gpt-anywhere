@@ -12,6 +12,7 @@ export const DEFAULT_TIMEOUT = 10;
 
 export const STORE_KEY = {
   API_KEY: "api_key",
+  USER: "user_details",
   MAX_TOKENS: "max_length",
   TIMEOUT: "timeout",
 };
