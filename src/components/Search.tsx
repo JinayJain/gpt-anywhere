@@ -107,7 +107,6 @@ function Search({
   // fetch user
   async function fetchUsers() {
     const tokenAPINgepet = await store.get(STORE_KEY.API_KEY);
-    console.log("masuuk");
     // Construct the URL
     const url = `http://52.77.54.192:4000/v1/organizations/51d11458-e9ac-453b-9d9d-ff31498c550d/users`;
 
@@ -241,6 +240,11 @@ function Search({
               autoFocus
               placeholder="Type # or @ to show syntax..."
               onFocus={fetchUsers}
+              // onSubmit={(e) => {
+              //   e.preventDefault();
+              //   onGenerate(prompt.trim(), temperature);
+              //   setPrompt("");
+              // }}
             >
               <Mention
                 trigger="@"
@@ -367,7 +371,7 @@ function Search({
               Settings
             </Button>
 
-            {/* <Button
+            <Button
               leftIcon={<Icon as={NotAllowedIcon} />}
               colorScheme="red"
               variant="outline"
@@ -375,7 +379,7 @@ function Search({
               size="sm"
             >
               Clear Chat
-            </Button> */}
+            </Button>
           </HStack>
         </Box>
       </Collapse>

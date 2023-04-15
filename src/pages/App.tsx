@@ -9,12 +9,14 @@ import ErrorBox from "../components/ErrorBox";
 import PromptBox from "../components/PromptBox";
 import useChatLog, { ChatMessage } from "../util/hooks/useChatLog";
 import { NotAllowedIcon, RepeatIcon } from "@chakra-ui/icons";
+import ConfirmationBox from "../components/ConfirmationBox";
 
 const CLEAR_TEXT = "";
 // const CLEAR_TEXT = fillerMarkdown;
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const [bgClicked, setBgClicked] = useState(false);
   const { chatLog, addPrompt, addResponse, clearChatLog } = useChatLog();
   const [error, setError] = useState<Error | null>(null);
@@ -37,8 +39,8 @@ function App() {
         { type: "prompt", text: prompt },
       ];
 
-      addPrompt(prompt);
       setError(null);
+      addPrompt(prompt);
       setIsLoading(true);
 
       try {
@@ -59,6 +61,7 @@ function App() {
       }
 
       setIsLoading(false);
+      setShowConfirmation(true);
     }
   };
 
@@ -99,7 +102,16 @@ function App() {
               )}
             </Box>
           )}
-
+          {!showConfirmation && (
+            <Box
+              as={motion.div}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <ConfirmationBox prompt={"asd"} />
+            </Box>
+          )}
           {[...chatLog]
             .map((message, i) => (
               <Box

@@ -8,6 +8,8 @@ export type ChatMessage = {
 function useChatLog() {
   const [chatLog, setChatLog] = useState<ChatMessage[]>([]);
 
+  console.log('useChatLog', chatLog)
+
   const addMessage = (message: ChatMessage) => {
     setChatLog((chatLog) => [...chatLog, message]);
   };

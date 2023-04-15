@@ -97,6 +97,18 @@ function Settings() {
     }
     setLoadingLogin(false);
   }
+  async function handleLogout() {
+    await store.set(STORE_KEY.API_KEY, undefined);
+    await store.set(STORE_KEY.USER, undefined);
+    await store.save();
+    toast({
+      title: "Logout Success",
+      description: "Your logout have been success.",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  }
 
   const handleSave = async () => {
     if (!apiKey) return;
@@ -164,7 +176,10 @@ function Settings() {
         </FormControl>
 
         <FormControl>
-          <Button onClick={handleLogin} isLoading={loadingLogin}>Login</Button>
+          <Button onClick={handleLogin} isLoading={loadingLogin}>
+            Login
+          </Button>
+          <Button onClick={handleLogout}>Logout</Button>
         </FormControl>
 
         {/* <FormControl>
