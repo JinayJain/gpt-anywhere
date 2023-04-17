@@ -78,7 +78,6 @@ async function sendApiRequest(
       ...apiParams,
     }),
   });
-  console.log('response123', response)
   return response
 }
 
@@ -90,8 +89,6 @@ async function sendApiRequestNgepet(
   // const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
   const tokenAPINgepet = await store.get(STORE_KEY.API_KEY);
   const userDetails = await store.get(STORE_KEY.USER);
-  console.log('tokenAPINgepet', tokenAPINgepet)
-  console.log('userDetails', userDetails)
   const max_tokens =
     Number(await store.get(STORE_KEY.MAX_TOKENS)) || DEFAULT_MAX_TOKENS;
 
@@ -103,7 +100,6 @@ async function sendApiRequestNgepet(
     content: msg.text,
   }));
 
-  console.log('chat from api aldi', chat)
   let prompts = chat?.filter((c) => c?.type === 'prompt')
   let params = {
     // message: chat?.[0]?.text,
@@ -117,7 +113,7 @@ async function sendApiRequestNgepet(
       "Content-Type": "application/json",
       Authorization: "Bearer " + tokenAPINgepet,
     },
-    // signal,
+    signal,
     body: JSON.stringify(params),
   });
   const data = await response.json();
@@ -190,7 +186,7 @@ async function chatComplete({
   const res = await sendApiRequestNgepet(chat, controller, apiParams);
   console.log('res api aldi', res)
 
-  if (res) {
+  if (!(res.statusCode >= 200 && res.statusCode <= 300)) {
     if (res.statusCode === 401) {
       throw new Error("Unauthorized");
     }
@@ -204,10 +200,11 @@ async function chatComplete({
 
   // const reader = res.body.getReader();
 
-  // const handleChunk = (message: string) => {
-  //   clearTimeout(handle);
-  //   onChunk(message);
-  // };
+  const handleChunk = (message: string) => {
+    clearTimeout(handle);
+    onChunk(message);
+  };
+  handleChunk()
   return res?.data?.completion?.message
   // return await processBody(reader, handleChunk);
 }

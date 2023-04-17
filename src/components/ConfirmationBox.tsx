@@ -10,10 +10,32 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 
-const ConfirmationBox = ({ prompt }: { prompt: string }) => {
+const ConfirmationBox = ({
+  prompt,
+  tempPrompt,
+  tempFiles,
+  onGenerate = () => {},
+  onCancel = () => {},
+}: {
+  prompt: string;
+  tempPrompt: string;
+  tempFiles: any;
+  onGenerate?: (prompt: string, temperature: number) => void;
+  onCancel?: () => void;
+}) => {
+  function convertString(input: string) {
+    // Regular expression to match unwanted characters
+    const regex = /#\(?(.*?)\[[^\[\]]*\]\)?/g;
+
+    // Replace unwanted characters and maintain the text inside parentheses
+    const result = input.replace(regex, "$1 ").replace(/\s+/g, " ").trim();
+
+    return result;
+  }
+
   return (
     <Box bg="blackAlpha.800" p={4} rounded="md">
-      <Text fontStyle="italic" lineHeight={10}>
+      {/* <Text fontStyle="italic" lineHeight={10}>
         Draft MSA for
         <Tag size="lg" variant={"solid"} colorScheme="gray" mx={3}>
           <Avatar
@@ -138,7 +160,38 @@ const ConfirmationBox = ({ prompt }: { prompt: string }) => {
           />
           <TagLabel>Bryan</TagLabel>
         </Tag>
-      </Text>
+      </Text> */}
+      {tempPrompt && tempFiles && tempFiles?.length !== 0 ? (
+        <>
+          <Text fontStyle="italic" lineHeight={10}>
+            Prompt: {convertString(tempPrompt)} ?
+          </Text>
+          {tempFiles?.map((file: string, i: number) => {
+            return (
+              <Text
+                key={i}
+                fontStyle="italic"
+                mt={3}
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
+              >
+                Reviewing
+                <Tag size="lg" colorScheme="whatsapp" mx={3}>
+                  <Avatar
+                    src="data:image/png;base64,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"
+                    size="xs"
+                    name="google drive"
+                    ml={-1}
+                    mr={2}
+                  />
+                  <TagLabel>{file}</TagLabel>
+                </Tag>
+              </Text>
+            );
+          })}
+        </>
+      ) : null}
       <Center
         as={motion.div}
         initial={{ opacity: 0 }}
@@ -148,11 +201,24 @@ const ConfirmationBox = ({ prompt }: { prompt: string }) => {
       >
         <Button
           size="sm"
+          mr={3}
           // leftIcon={<NotAllowedIcon />}
-          // onClick={clearChatLog}
+          onClick={() => {
+            onGenerate(tempPrompt, 1);
+          }}
           colorScheme="green"
         >
-          See Document
+          Yes
+        </Button>
+        <Button
+          size="sm"
+          // leftIcon={<NotAllowedIcon />}
+          onClick={() => {
+            onCancel();
+          }}
+          colorScheme="red"
+        >
+          No
         </Button>
       </Center>
     </Box>

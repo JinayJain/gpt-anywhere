@@ -16,9 +16,12 @@ const CLEAR_TEXT = "";
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [tempPrompt, setTempPrompt] = useState<string>("");
+  const [tempFiles, setTempFiles] = useState<any>([]);
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [bgClicked, setBgClicked] = useState(false);
-  const { chatLog, addPrompt, addResponse, clearChatLog } = useChatLog();
+  const { chatLog, addPrompt, addResponse, clearChatLog, popChatLog } =
+    useChatLog();
   const [error, setError] = useState<Error | null>(null);
 
   const handleBgClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -31,8 +34,14 @@ function App() {
       setBgClicked(false);
     }, 200);
   };
+  const handleClearChatLog = () => {
+    clearChatLog();
+    setError(null);
+    setShowConfirmation(false);
+  };
 
   const handleGenerate = async (prompt: string, temperature = 1.0) => {
+    console.log("prompt", prompt);
     if (prompt) {
       const chatHistory: ChatMessage[] = [
         ...chatLog,
@@ -42,6 +51,7 @@ function App() {
       setError(null);
       addPrompt(prompt);
       setIsLoading(true);
+      setShowConfirmation(false);
 
       try {
         const response = await chatComplete({
@@ -61,8 +71,33 @@ function App() {
       }
 
       setIsLoading(false);
-      setShowConfirmation(true);
     }
+  };
+
+  const handleConfirmation = async (prompt: string, temperature = 1.0) => {
+    if (prompt) {
+      const str = prompt;
+      const regex = /#\((.*?)\[\d+\]\)/g;
+      const matches = [];
+      let match;
+      while ((match = regex.exec(str)) !== null) {
+        matches.push(match[1]);
+      }
+      console.log(matches);
+      if (matches && matches?.length !== 0) {
+        setTempPrompt(prompt);
+        setTempFiles(matches);
+        // addPrompt(prompt);
+        setShowConfirmation(true);
+      } else {
+        handleGenerate(prompt, temperature);
+      }
+    }
+  };
+  const handleCancelConfirmation = async () => {
+    setShowConfirmation(false);
+    setTempPrompt("");
+    setTempFiles([]);
   };
 
   return (
@@ -76,8 +111,11 @@ function App() {
       rounded="md"
     >
       <Search
-        onGenerate={handleGenerate}
-        onClear={clearChatLog}
+        onGenerate={handleConfirmation}
+        // onClear={() => {
+        //   handleClearChatLog();
+        //   setShowConfirmation(false);
+        // }}
         isLoading={isLoading}
         mb={2}
       />
@@ -86,6 +124,7 @@ function App() {
         <AnimatePresence>
           {error && (
             <Box
+              key={"error-1"}
               as={motion.div}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -102,14 +141,21 @@ function App() {
               )}
             </Box>
           )}
-          {!showConfirmation && (
+          {showConfirmation && (
             <Box
+              key={"confirmation-1"}
               as={motion.div}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <ConfirmationBox prompt={"asd"} />
+              <ConfirmationBox
+                prompt={"asd"}
+                onGenerate={handleGenerate}
+                onCancel={handleCancelConfirmation}
+                tempPrompt={tempPrompt}
+                tempFiles={tempFiles}
+              />
             </Box>
           )}
           {[...chatLog]
@@ -142,7 +188,7 @@ function App() {
               <Button
                 size="sm"
                 leftIcon={<NotAllowedIcon />}
-                onClick={clearChatLog}
+                onClick={handleClearChatLog}
                 colorScheme="red"
               >
                 Reset Chat

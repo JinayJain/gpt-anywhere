@@ -26,11 +26,16 @@ function useChatLog() {
     setChatLog([]);
   };
 
+  const popChatLog = () => {
+    // setChatLog(chatLog.pop());
+  };
+
   return {
     chatLog,
     addPrompt,
     addResponse,
     clearChatLog,
+    popChatLog,
   };
 }
 

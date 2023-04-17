@@ -188,7 +188,7 @@ function Search({
     setPrompt(event?.target?.value);
   };
 
-  console.log("Value changedaa:", valueInput);
+  // console.log("Value changedaa:", valueInput);
 
   useEffect(() => {
     const unlisten = listen("show", (e) => {
@@ -249,7 +249,7 @@ function Search({
               <Mention
                 trigger="@"
                 data={searchUsers}
-                markup={"@__display__[__id__]"}
+                markup={"@(__display__[__id__])"}
                 style={mentionStyle}
                 displayTransform={(id, display) => `@${display}${id}`}
                 renderSuggestion={(
@@ -274,7 +274,7 @@ function Search({
               <Mention
                 trigger="#"
                 data={searchFiles}
-                markup={"#__display__[__id__]"}
+                markup={"#(__display__[__id__])"}
                 style={mentionStyle2}
                 displayTransform={(id, display) => `#${display}${id}`}
                 renderSuggestion={(
@@ -371,7 +371,7 @@ function Search({
               Settings
             </Button>
 
-            <Button
+            {/* <Button
               leftIcon={<Icon as={NotAllowedIcon} />}
               colorScheme="red"
               variant="outline"
@@ -379,7 +379,7 @@ function Search({
               size="sm"
             >
               Clear Chat
-            </Button>
+            </Button> */}
           </HStack>
         </Box>
       </Collapse>
