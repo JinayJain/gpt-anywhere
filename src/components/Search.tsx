@@ -107,6 +107,8 @@ function Search({
   // fetch user
   async function fetchUsers() {
     const tokenAPINgepet = await store.get(STORE_KEY.API_KEY);
+    const user = await store.get(STORE_KEY.USER);
+    console.log(user)
     // Construct the URL
     const url = `http://52.77.54.192:4000/v1/organizations/51d11458-e9ac-453b-9d9d-ff31498c550d/users`;
 

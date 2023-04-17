@@ -204,7 +204,7 @@ async function chatComplete({
     clearTimeout(handle);
     onChunk(message);
   };
-  handleChunk()
+  handleChunk(res?.data?.completion?.message)
   return res?.data?.completion?.message
   // return await processBody(reader, handleChunk);
 }

@@ -176,7 +176,7 @@ function Settings() {
         </FormControl>
 
         <FormControl>
-          <Button onClick={handleLogin} isLoading={loadingLogin}>
+          <Button onClick={handleLogin} isLoading={loadingLogin} mr={3}>
             Login
           </Button>
           <Button onClick={handleLogout}>Logout</Button>
