@@ -51,7 +51,7 @@ const mentionStyle = {
   color: "black",
 };
 const mentionStyle2 = {
-  backgroundColor: "yellow",
+  backgroundColor: "#7463e6",
   color: "black",
 };
 
@@ -97,6 +97,7 @@ function Search({
   const [showOptions, setShowOptions] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [listUsers, setListUsers] = useState<User[]>([]);
+  const [listFiles, setListFiles] = useState<File[]>([]);
 
   const inputRef = useRef<any>(null);
 
@@ -109,7 +110,7 @@ function Search({
     const tokenAPINgepet = await store.get(STORE_KEY.API_KEY);
     const user = await store.get(STORE_KEY.USER);
     // Construct the URL
-    const url = `http://52.77.54.192:4000/v1/organizations/51d11458-e9ac-453b-9d9d-ff31498c550d/users`;
+    const url = `http://52.77.54.192:4000/v1/organizations/${user?.division?.organizationId}/users`;
 
     try {
       // Perform the GET request
@@ -137,6 +138,64 @@ function Search({
     } catch (error) {
       console.error("Error fetching users:", error);
       setListUsers([]);
+      throw error;
+    }
+  }
+  // fetch user
+  async function fetchFiles() {
+    const tokenAPINgepet = await store.get(STORE_KEY.API_KEY);
+    const user = await store.get(STORE_KEY.USER);
+    // Construct the URL
+    const url = `http://52.77.54.192:4000/v1/organizations/${user?.division?.organizationId}/connections`;
+
+    try {
+      // Perform the GET request
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + tokenAPINgepet,
+        },
+      });
+
+      // Check if the request was successful
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+
+      // Parse and return the JSON response
+      const data = await response.json();
+      const connection_id = data?.data?.docs?.[0]?.connectionId;
+      // console.log("connection_id", connection_id);
+      if (connection_id) {
+        const url2 = `http://52.77.54.192:4000/v1/organizations/${user?.division?.organizationId}/connections/${connection_id}`;
+        // Perform the GET request
+        const response2 = await fetch(url2, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + tokenAPINgepet,
+          },
+        });
+        // Check if the request was successful
+        if (!response.ok) {
+          throw new Error(`HTTP error ${response.status}`);
+        }
+        // Parse and return the JSON response
+        const data2 = await response2.json();
+        // console.log("data2", data2);
+        setListFiles(
+          data2?.data?.docs?.map((user: { name: String; id: String }) => {
+            return { id: user?.id, display: user?.name };
+          }) ?? []
+        );
+        // return data;
+      } else {
+        setListFiles([]);
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      setListFiles([]);
       throw error;
     }
   }
@@ -173,7 +232,7 @@ function Search({
     query: string,
     callback: (files: File[]) => void
   ): void => {
-    const filteredFiles = files.filter((file) =>
+    const filteredFiles = listFiles.filter((file) =>
       file.display.toLowerCase().includes(query.toLowerCase())
     );
     callback(filteredFiles);
@@ -211,6 +270,8 @@ function Search({
     if (inputRef2.current) {
       inputRef2.current.style.setProperty("height", "auto", "important");
     }
+    fetchUsers();
+    fetchFiles();
   }, []);
 
   return (
@@ -240,7 +301,7 @@ function Search({
               style={inputStyle}
               autoFocus
               placeholder="Type # or @ to show syntax..."
-              onFocus={fetchUsers}
+              // onFocus={fetchUsers}
               // onSubmit={(e) => {
               //   e.preventDefault();
               //   onGenerate(prompt.trim(), temperature);
@@ -252,7 +313,7 @@ function Search({
                 data={searchUsers}
                 markup={"@(__display__[__id__])"}
                 style={mentionStyle}
-                displayTransform={(id, display) => `@${display}${id}`}
+                displayTransform={(id, display) => `@${display}`}
                 renderSuggestion={(
                   suggestion: SuggestionDataItem,
                   search: string,
@@ -277,7 +338,7 @@ function Search({
                 data={searchFiles}
                 markup={"#(__display__[__id__])"}
                 style={mentionStyle2}
-                displayTransform={(id, display) => `#${display}${id}`}
+                displayTransform={(id, display) => `#${display}`}
                 renderSuggestion={(
                   suggestion: SuggestionDataItem,
                   search: string,
