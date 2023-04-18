@@ -108,7 +108,6 @@ function Search({
   async function fetchUsers() {
     const tokenAPINgepet = await store.get(STORE_KEY.API_KEY);
     const user = await store.get(STORE_KEY.USER);
-    console.log(user)
     // Construct the URL
     const url = `http://52.77.54.192:4000/v1/organizations/51d11458-e9ac-453b-9d9d-ff31498c550d/users`;
 
@@ -335,7 +334,7 @@ function Search({
       <Collapse in={showOptions} animateOpacity>
         <Box p={2} rounded="md" bg="blackAlpha.800" mt={2}>
           <HStack>
-            <Icon as={CiTempHigh} />
+            {/* <Icon as={CiTempHigh} />
             <Slider
               aria-label="temperature"
               min={0}
@@ -361,7 +360,7 @@ function Search({
 
             <Text w={24} align="center">
               {temperatureLabel || temperature}
-            </Text>
+            </Text> */}
 
             <Button
               leftIcon={<Icon as={SettingsIcon} />}
