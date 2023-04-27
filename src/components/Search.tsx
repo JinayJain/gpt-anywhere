@@ -162,9 +162,10 @@ function Search({
       setListUsers([]);
       return;
     }
+    console.log(user)
 
     // Construct the URL
-    const url = `http://52.77.54.192:4000/v1/organizations/${user.division.organizationId}/connections/documents`;
+    const url = `http://52.77.54.192:4000/v1/organizations/${user.division.organizationId}/connections`;
 
     try {
       // Perform the GET request
@@ -186,7 +187,7 @@ function Search({
       const connection_id = data?.data?.docs?.[0]?.connectionId;
       // console.log("connection_id", connection_id);
       if (connection_id) {
-        const url2 = `http://52.77.54.192:4000/v1/organizations/${user.division.organizationId}/connections/${connection_id}`;
+        const url2 = `http://52.77.54.192:4000/v1/organizations/${user.division.organizationId}/connections/${connection_id}/documents`;
         // Perform the GET request
         const response2 = await fetch(url2, {
           method: "GET",
