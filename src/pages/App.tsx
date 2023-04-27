@@ -77,7 +77,7 @@ function App() {
   const handleConfirmation = async (prompt: string, temperature = 1.0) => {
     if (prompt) {
       const str = prompt;
-      const regex = /#\((.*?)\[\d+\]\)/g;
+      const regex = /#\(([^[]+)\[[^\]]+\]\)/g;
       const matches = [];
       let match;
       while ((match = regex.exec(str)) !== null) {

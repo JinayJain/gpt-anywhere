@@ -25,7 +25,7 @@ const ConfirmationBox = ({
 }) => {
   function convertString(input: string) {
     // Regular expression to match unwanted characters
-    const regex = /#\(?(.*?)\[[^\[\]]*\]\)?/g;
+    const regex = /#\(([^[]+)\[[^\]]+\]\)/g;
 
     // Replace unwanted characters and maintain the text inside parentheses
     const result = input.replace(regex, "$1 ").replace(/\s+/g, " ").trim();
