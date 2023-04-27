@@ -113,7 +113,7 @@ async function sendApiRequestNgepet(
       "Content-Type": "application/json",
       Authorization: "Bearer " + tokenAPINgepet,
     },
-    signal,
+    // signal,
     body: JSON.stringify(params),
   });
   const data = await response.json();
@@ -200,11 +200,11 @@ async function chatComplete({
 
   // const reader = res.body.getReader();
 
-  const handleChunk = (message: string) => {
-    clearTimeout(handle);
-    onChunk(message);
-  };
-  handleChunk(res?.data?.completion?.message)
+  // const handleChunk = (message: string) => {
+  //   clearTimeout(handle);
+  //   onChunk(message);
+  // };
+  // handleChunk(res?.data?.completion?.message)
   return res?.data?.completion?.message
   // return await processBody(reader, handleChunk);
 }
