@@ -164,7 +164,7 @@ function Search({
     }
 
     // Construct the URL
-    const url = `http://52.77.54.192:4000/v1/organizations/${user.division.organizationId}/connections`;
+    const url = `http://52.77.54.192:4000/v1/organizations/${user.division.organizationId}/connections/documents`;
 
     try {
       // Perform the GET request
