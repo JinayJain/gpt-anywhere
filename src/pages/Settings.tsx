@@ -55,7 +55,6 @@ function Settings() {
       setTimeout(timeout ?? DEFAULT_TIMEOUT);
       setMaxTokens(maxTokens ?? DEFAULT_MAX_TOKENS);
     };
-
     populateFields();
   }, []);
 
@@ -63,7 +62,7 @@ function Settings() {
     if (!username || username === "" || !password || password === "")
       toggleIsFilled();
     setLoadingLogin(true);
-    const response = await fetch("http://52.77.54.192:4000/v1/auth/login", {
+    const response = await fetch("https://ngepet.c4budiman.com/v1/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -80,6 +79,7 @@ function Settings() {
       await store.set(STORE_KEY.API_KEY, data.data.accessToken);
       await store.set(STORE_KEY.USER, data.data.user);
       await store.save();
+      setApiKey(data.data.accessToken);
 
       toast({
         title: "Login Success",
@@ -98,34 +98,37 @@ function Settings() {
     setLoadingLogin(false);
   }
   async function handleLogout() {
-    await store.set(STORE_KEY.API_KEY, undefined);
-    await store.set(STORE_KEY.USER, undefined);
-    await store.save();
-    toast({
-      title: "Logout Success",
-      description: "Your logout have been success.",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-    });
+    const tokenAPINgepet = await store.get(STORE_KEY.API_KEY);
+    if (tokenAPINgepet) {
+      await store.set(STORE_KEY.API_KEY, null);
+      await store.save();
+      toast({
+        title: "Logout Success",
+        description: "Your logout have been success.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      setApiKey(null)
+    }
   }
 
-  const handleSave = async () => {
-    if (!apiKey) return;
+  // const handleSave = async () => {
+  //   if (!apiKey) return;
 
-    await store.set(STORE_KEY.API_KEY, apiKey);
-    await store.set(STORE_KEY.TIMEOUT, timeout ?? DEFAULT_TIMEOUT);
-    await store.set(STORE_KEY.MAX_TOKENS, maxTokens ?? DEFAULT_MAX_TOKENS);
-    await store.save();
+  //   await store.set(STORE_KEY.API_KEY, apiKey);
+  //   await store.set(STORE_KEY.TIMEOUT, timeout ?? DEFAULT_TIMEOUT);
+  //   await store.set(STORE_KEY.MAX_TOKENS, maxTokens ?? DEFAULT_MAX_TOKENS);
+  //   await store.save();
 
-    toast({
-      title: "Saved",
-      description: "Your settings have been saved.",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-    });
-  };
+  //   toast({
+  //     title: "Saved",
+  //     description: "Your settings have been saved.",
+  //     status: "success",
+  //     duration: 3000,
+  //     isClosable: true,
+  //   });
+  // };
 
   return (
     <Box p={4}>
@@ -135,51 +138,56 @@ function Settings() {
       <Heading>Settings</Heading>
 
       <Stack mt={4} spacing={4}>
-        <FormControl>
-          {/* <FormLabel>OpenAI API Key</FormLabel> */}
-          <FormLabel>Login to get acces to this apps</FormLabel>
-          <Input
-            mt={4}
-            type="username"
-            placeholder="Username..."
-            value={username || ""}
-            onChange={(e) => setUsername(e.target.value)}
-            isRequired
-          />
-          <Input
-            mt={4}
-            type="password"
-            placeholder="Password..."
-            value={password || ""}
-            onChange={(e) => setPassword(e.target.value)}
-            isRequired
-          />
-          {/* <Input
+        {!apiKey && (
+          <FormControl>
+            {/* <FormLabel>OpenAI API Key</FormLabel> */}
+            <FormLabel>Login to get acces to this apps</FormLabel>
+            <Input
+              mt={4}
+              type="username"
+              placeholder="Username..."
+              value={username || ""}
+              onChange={(e) => setUsername(e.target.value)}
+              isRequired
+            />
+            <Input
+              mt={4}
+              type="password"
+              placeholder="Password..."
+              value={password || ""}
+              onChange={(e) => setPassword(e.target.value)}
+              isRequired
+            />
+            {/* <Input
             type="password"
             placeholder="sk-..."
             value={apiKey || ""}
             onChange={(e) => setApiKey(e.target.value)}
             isRequired
           /> */}
-          {isFilled ? (
-            <FormHelperText color={"red.400"}>
-              {msgError ? msgError : "Username or password must be filled"}
-              {/* <Link
+            {isFilled ? (
+              <FormHelperText color={"red.400"}>
+                {msgError ? msgError : "Username or password must be filled"}
+                {/* <Link
               href="https://platform.openai.com/account/api-keys"
               isExternal
               color="blue.400"
             >
               OpenAI's website
             </Link> */}
-            </FormHelperText>
-          ) : null}
-        </FormControl>
+              </FormHelperText>
+            ) : null}
+          </FormControl>
+        )}
 
         <FormControl>
-          <Button onClick={handleLogin} isLoading={loadingLogin} mr={3}>
-            Login
-          </Button>
-          <Button onClick={handleLogout}>Logout</Button>
+          {!apiKey ? (
+            <Button onClick={handleLogin} isLoading={loadingLogin} mr={3}>
+              Login
+            </Button>
+          ) : (
+            <Button onClick={handleLogout}>Logout</Button>
+          )}
         </FormControl>
 
         {/* <FormControl>

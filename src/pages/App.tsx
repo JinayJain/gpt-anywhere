@@ -175,7 +175,8 @@ function App() {
                 )}
               </Box>
             ))
-            .reverse()}
+            // .reverse()
+            }
 
           {chatLog.length > 0 && (
             <Center
