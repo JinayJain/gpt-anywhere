@@ -162,7 +162,7 @@ function Search({
       setListUsers([]);
       return;
     }
-    console.log(user)
+    console.log(user);
 
     // Construct the URL
     const url = `https://ngepet.c4budiman.com/v1/organizations/${user.division.organizationId}/connections`;
@@ -303,7 +303,7 @@ function Search({
         }}
       >
         <HStack>
-          <InputGroup size="lg">
+          <InputGroup size="lg" sx={{ borderColor: "blue" }}>
             {/* <Input
               ref={inputRef}
               placeholder="Unleash your creativity"
@@ -391,18 +391,22 @@ function Search({
           <Tooltip label="Generate" aria-label="Generate" hasArrow>
             <IconButton
               size="lg"
-              colorScheme="green"
+              // variant="outline"
+              colorScheme="blue"
               aria-label="Generate"
               icon={<BsChatRightFill />}
               type="submit"
               isLoading={isLoading}
+              // sx={{ backgroundColor: "white" }}
             />
           </Tooltip>
 
           <Tooltip label="Options" aria-label="Options" hasArrow>
             <IconButton
               size="lg"
-              colorScheme="green"
+              // variant="outline"
+              colorScheme="blue"
+              // sx={{ backgroundColor: "white" }}
               aria-label="Options"
               icon={showOptions ? <ChevronUpIcon /> : <ChevronDownIcon />}
               onClick={() => setShowOptions(!showOptions)}

@@ -11,8 +11,10 @@ const PromptBox = ({ prompt }: { prompt: string }) => {
     return result;
   }
   return (
-    <Box bg="blackAlpha.800" p={4} rounded="md">
-      <Text fontStyle="italic">{convertString(prompt)}</Text>
+    <Box bg="whiteAlpha.700" p={4} rounded="md">
+      <Text color={"black"} fontStyle="italic">
+        {convertString(prompt)}
+      </Text>
     </Box>
   );
 };
