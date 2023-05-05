@@ -19,3 +19,7 @@ body {
 .user-suggestion.focused {
   background-color: #b3d4fc;
 }
+
+#mentionInputLights::placeholder {
+  color: rgb(165, 165, 165);
+}

@@ -34,15 +34,17 @@ import store from "../util/store";
 import { STORE_KEY } from "../util/consts";
 
 const inputStyle = {
-  border: "1px solid #ccc",
+  border: "1px solid skyblue",
   borderRadius: "5px",
   padding: "8px",
   // fontSize: "16px",
   // outline: "none",
-  backgroundColor: "black",
+  backgroundColor: "white",
+  color: "black",
   width: "100%",
   input: {
     padding: "8px",
+    color: "black",
   },
 };
 
@@ -122,7 +124,7 @@ function Search({
     }
 
     // Construct the URL
-    const url = `http://52.77.54.192:4000/v1/organizations/${user?.division?.organizationId}/users`;
+    const url = `https://ngepet.c4budiman.com/v1/organizations/${user?.division?.organizationId}/users`;
 
     try {
       // Perform the GET request
@@ -162,10 +164,10 @@ function Search({
       setListUsers([]);
       return;
     }
-    console.log(user)
+    console.log(user);
 
     // Construct the URL
-    const url = `http://52.77.54.192:4000/v1/organizations/${user.division.organizationId}/connections`;
+    const url = `https://ngepet.c4budiman.com/v1/organizations/${user.division.organizationId}/connections`;
 
     try {
       // Perform the GET request
@@ -187,7 +189,7 @@ function Search({
       const connection_id = data?.data?.docs?.[0]?.connectionId;
       // console.log("connection_id", connection_id);
       if (connection_id) {
-        const url2 = `http://52.77.54.192:4000/v1/organizations/${user.division.organizationId}/connections/${connection_id}/documents`;
+        const url2 = `https://ngepet.c4budiman.com/v1/organizations/${user.division.organizationId}/connections/${connection_id}/documents`;
         // Perform the GET request
         const response2 = await fetch(url2, {
           method: "GET",
@@ -303,7 +305,7 @@ function Search({
         }}
       >
         <HStack>
-          <InputGroup size="lg">
+          <InputGroup size="lg" sx={{ borderColor: "blue" }}>
             {/* <Input
               ref={inputRef}
               placeholder="Unleash your creativity"
@@ -315,6 +317,7 @@ function Search({
             /> */}
             <MentionsInput
               ref={inputRef}
+              id="mentionInputLights"
               value={prompt}
               onChange={handleChange}
               style={inputStyle}
@@ -382,7 +385,7 @@ function Search({
               children={
                 <DragHandleIcon
                   cursor="grab"
-                  color="whiteAlpha.500"
+                  color="blackAlpha.600"
                   data-tauri-drag-region
                 />
               }
@@ -391,18 +394,23 @@ function Search({
           <Tooltip label="Generate" aria-label="Generate" hasArrow>
             <IconButton
               size="lg"
-              colorScheme="green"
+              // variant="outline"
+              colorScheme="blue"
+              color="white"
               aria-label="Generate"
               icon={<BsChatRightFill />}
               type="submit"
               isLoading={isLoading}
+              // sx={{ backgroundColor: "white" }}
             />
           </Tooltip>
 
           <Tooltip label="Options" aria-label="Options" hasArrow>
             <IconButton
               size="lg"
-              colorScheme="green"
+              // variant="outline"
+              colorScheme="blue"
+              color="white"
               aria-label="Options"
               icon={showOptions ? <ChevronUpIcon /> : <ChevronDownIcon />}
               onClick={() => setShowOptions(!showOptions)}
@@ -412,7 +420,7 @@ function Search({
       </form>
 
       <Collapse in={showOptions} animateOpacity>
-        <Box p={2} rounded="md" bg="blackAlpha.800" mt={2}>
+        <Box p={2} rounded="md" bg="whiteAlpha.800" mt={2}>
           <HStack>
             {/* <Icon as={CiTempHigh} />
             <Slider
@@ -445,7 +453,8 @@ function Search({
             <Button
               leftIcon={<Icon as={SettingsIcon} />}
               colorScheme="green"
-              variant="outline"
+              // color="white"
+              // variant="outline"
               onClick={onSettings}
               size="sm"
             >

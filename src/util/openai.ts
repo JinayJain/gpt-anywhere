@@ -107,7 +107,7 @@ async function sendApiRequestNgepet(
   };
   let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM5MDBkMGY5LTJkNjEtNDQ5NC05N2Q0LTRhMzZmY2NhOGY2ZCIsImlhdCI6MTY4MDc2MTY2MCwiZXhwIjoxNjgwNzY1MjYwfQ.CQ3lKGAy3cmzQEUBThUJcXVXEUibaVY0CM8B0hYJwyw"
 
-  let response = await fetch("http://52.77.54.192:4000/v1/messages", {
+  let response = await fetch("https://ngepet.c4budiman.com/v1/messages", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
