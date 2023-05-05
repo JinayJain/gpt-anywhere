@@ -34,7 +34,7 @@ import store from "../util/store";
 import { STORE_KEY } from "../util/consts";
 
 const inputStyle = {
-  border: "1px solid #ccc",
+  border: "1px solid skyblue",
   borderRadius: "5px",
   padding: "8px",
   // fontSize: "16px",
@@ -44,6 +44,7 @@ const inputStyle = {
   width: "100%",
   input: {
     padding: "8px",
+    color: "black",
   },
 };
 
@@ -316,6 +317,7 @@ function Search({
             /> */}
             <MentionsInput
               ref={inputRef}
+              id="mentionInputLights"
               value={prompt}
               onChange={handleChange}
               style={inputStyle}
