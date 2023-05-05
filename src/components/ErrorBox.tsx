@@ -2,7 +2,7 @@ import { Text, Box, Heading, Link } from "@chakra-ui/react";
 
 const ErrorBox = ({ error }: { error: Error }) => {
   return (
-    <Box bg={"whiteAlpha.700"} p={4}>
+    <Box bg={"whiteAlpha.800"} p={4}>
       <Heading size="sm" color={'black'}>
         An error occurred while generating a response.
       </Heading>

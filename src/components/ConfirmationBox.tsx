@@ -34,7 +34,7 @@ const ConfirmationBox = ({
   }
 
   return (
-    <Box bg="blackAlpha.800" p={4} rounded="md">
+    <Box bg="whiteAlpha.800" p={4} rounded="md">
       {/* <Text fontStyle="italic" lineHeight={10}>
         Draft MSA for
         <Tag size="lg" variant={"solid"} colorScheme="gray" mx={3}>

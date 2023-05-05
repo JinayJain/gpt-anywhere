@@ -39,7 +39,8 @@ const inputStyle = {
   padding: "8px",
   // fontSize: "16px",
   // outline: "none",
-  backgroundColor: "black",
+  backgroundColor: "white",
+  color: "black",
   width: "100%",
   input: {
     padding: "8px",
@@ -382,7 +383,7 @@ function Search({
               children={
                 <DragHandleIcon
                   cursor="grab"
-                  color="whiteAlpha.500"
+                  color="blackAlpha.600"
                   data-tauri-drag-region
                 />
               }
@@ -393,6 +394,7 @@ function Search({
               size="lg"
               // variant="outline"
               colorScheme="blue"
+              color="white"
               aria-label="Generate"
               icon={<BsChatRightFill />}
               type="submit"
@@ -406,7 +408,7 @@ function Search({
               size="lg"
               // variant="outline"
               colorScheme="blue"
-              // sx={{ backgroundColor: "white" }}
+              color="white"
               aria-label="Options"
               icon={showOptions ? <ChevronUpIcon /> : <ChevronDownIcon />}
               onClick={() => setShowOptions(!showOptions)}
@@ -416,7 +418,7 @@ function Search({
       </form>
 
       <Collapse in={showOptions} animateOpacity>
-        <Box p={2} rounded="md" bg="blackAlpha.800" mt={2}>
+        <Box p={2} rounded="md" bg="whiteAlpha.800" mt={2}>
           <HStack>
             {/* <Icon as={CiTempHigh} />
             <Slider
@@ -449,7 +451,8 @@ function Search({
             <Button
               leftIcon={<Icon as={SettingsIcon} />}
               colorScheme="green"
-              variant="outline"
+              // color="white"
+              // variant="outline"
               onClick={onSettings}
               size="sm"
             >
