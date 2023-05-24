@@ -2,11 +2,12 @@ import React from "react";
 
 type FlexProps = {
   children?: React.ReactNode;
-  direction?: any;
+  direction?: "column" | "row";
   items?: any;
   justify?: any;
   gap?: any;
   width?: any;
+  className?: any;
 };
 
 export default function Flex({
@@ -16,6 +17,7 @@ export default function Flex({
   justify = "center",
   gap = "0px",
   width = "100%",
+  className = "",
 }: FlexProps) {
   return (
     <div
@@ -27,6 +29,7 @@ export default function Flex({
         justifyContent: justify,
         gap: gap,
       }}
+      className={className}
     >
       {children}
     </div>

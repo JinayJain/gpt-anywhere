@@ -56,7 +56,7 @@ const Field = ({
         <div style={{ position: "relative" }}>
           {textarea ? (
             <textarea
-              className={`w-full h-24 px-3 py-3 bg-n-2 border-2 border-n-2 rounded-xl base2  text-n-7 outline-none transition-colors  resize-none  ${
+              className={`w-full h-24 px-3 py-3 bg-n-2 border-2 border-n-2 rounded-lg base2  text-n-7 outline-none transition-colors  resize-none  ${
                 icon && "pl-14"
               } ${value !== "" && "bg-transparent b-n-3"}`}
               value={value}
@@ -68,7 +68,7 @@ const Field = ({
           ) : (
             <input
               name={name}
-              className={`w-full h-13 px-3 bg-n-2 border-2 b-n-2 rounded-xl base2  text-n-7 outline-none transition-colors  ${
+              className={`w-full h-13 px-3 bg-n-2 border-2 b-n-2 rounded-lg base2  text-n-7 outline-none transition-colors  ${
                 icon && "pl-14"
               } ${value !== "" && "bg-transparent b-n-3"} ${classInput}`}
               type={type || "text"}
@@ -87,7 +87,7 @@ const Field = ({
               pointerEvents: "none",
             }}
             className={`transition-colors`}
-            fill={"fill-n-4"}
+            fill={"var(--n-4)"}
             name={icon}
           />
         </div>
