@@ -7,22 +7,21 @@ interface requestGetProps<T> {
   needLogin?: boolean;
 }
 
+const ENVAPI = "http://54.254.188.38:9001";
+
 export const requestGet = async <T>(
   url: string,
   { withAuth = true, params, token, needLogin = true }: requestGetProps<T>
 ): Promise<T> => {
   try {
-    const response: AxiosResponse<T> = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}${url}`,
-      {
-        params,
-        headers: {
-          ...(withAuth && {
-            Authorization: `Bearer ${token}`,
-          }),
-        },
-      }
-    );
+    const response: AxiosResponse<T> = await axios.get(`${ENVAPI}${url}`, {
+      params,
+      headers: {
+        ...(withAuth && {
+          Authorization: `Bearer ${token}`,
+        }),
+      },
+    });
 
     //@ts-ignore
     if (response.statusCode === 401 || token === "") {
@@ -53,7 +52,7 @@ export const requestPost = async <T>(
 ): Promise<T> => {
   try {
     const response: AxiosResponse<T> = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}${url}`,
+      `${ENVAPI}${url}`,
       requestBody,
       {
         headers: {
@@ -69,8 +68,6 @@ export const requestPost = async <T>(
     }
     return response.data;
   } catch (error: any) {
-    if (error.response.status === 401) {
-    }
     throw error;
   }
 };
