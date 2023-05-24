@@ -1,5 +1,6 @@
 :root {
   --primary-1: #0084ff;
+  --primary-1-lighter: #2495ff;
   --primary-2: #3fdd78;
 
   --accent-1: #d84c10;
@@ -118,6 +119,57 @@ a:visited {
 .center-grid {
   display: grid !important;
   place-items: center !important;
+}
+
+.btn-0 {
+  padding: 0px;
+}
+
+.btn-sm {
+  padding: 2px 8px;
+}
+.btn-md {
+  padding: 8px 24px;
+}
+.btn-lg {
+  padding: 12px 48px;
+}
+
+.btn-text,
+.btn-contained,
+.btn-outlined {
+  transition: all 600ms;
+}
+
+.btn-text {
+  color: var(--primary-1);
+  cursor: pointer;
+}
+
+.btn-text:hover {
+  color: var(--primary-1-lighter);
+}
+
+.btn-contained {
+  background-color: var(--primary-1);
+  color: white;
+  cursor: pointer;
+}
+
+.btn-contained:hover {
+  background-color: var(--primary-1-lighter);
+  color: white;
+}
+
+.btn-outlined {
+  border: 1px solid var(--primary-1);
+  color: var(--primary-1);
+  cursor: pointer;
+}
+
+.btn-outlined:hover {
+  background-color: var(--primary-1-lighter);
+  color: white;
 }
 
 /* ============== STYLING COLORS */
