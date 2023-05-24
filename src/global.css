@@ -11,8 +11,8 @@
   --n-1: #fefefe;
   --n-2: #f3f5f7;
   --n-3: #e8ecef;
-  --n-4: #6c7275;
-  --n-5: #343839;
+  --n-4: #a1a4a6;
+  --n-5: #6c7275;
   --n-6: #232627;
   --n-7: #141718;
 }
@@ -76,6 +76,24 @@ a:visited {
   padding-top: 8px;
   padding-bottom: 8px;
   font-size: 18px;
+}
+
+.prompt-input::placeholder {
+  color: var(--n-4);
+}
+
+.input {
+  background-color: transparent;
+  border: 1px solid var(--n-3);
+  border-radius: 8px;
+  color: var(--n-6);
+  width: 100%;
+  padding: 8px 16px;
+  font-size: 16px;
+}
+
+.input::placeholder {
+  color: var(--n-4);
 }
 
 .prompt-input:focus {
