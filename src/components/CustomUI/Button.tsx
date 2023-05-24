@@ -1,15 +1,4 @@
 import React from "react";
-import {
-  btn_lg,
-  btn_sm,
-  btn_md,
-  btn_blue,
-  btn_light,
-  btn_dark,
-  btn_contained,
-  btn_outlined,
-  btn_text,
-} from "../../styles/custom-components-classes";
 
 type ButtonProps = {
   children: React.ReactNode;
