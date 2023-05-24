@@ -64,6 +64,21 @@ body {
 
 /* ======== STYLING COLORS */
 /* === TEXT */
+.text-white {
+  color: white;
+}
+.text-black {
+  color: black;
+}
+.text-red {
+  color: indianred;
+}
+.text-blue {
+  color: cornflowerblue;
+}
+.text-green {
+  color: darkseagreen;
+}
 .text-primary-1 {
   color: var(--primary-1);
 }
@@ -107,6 +122,12 @@ body {
   color: var(--n-7);
 }
 /* === BACKGROUND */
+.bg-white {
+  color: white;
+}
+.bg-black {
+  color: black;
+}
 .bg-red {
   background-color: indianred;
 }
@@ -159,6 +180,12 @@ body {
   background-color: var(--n-7);
 }
 /* === BORDER */
+.b-white {
+  color: white;
+}
+.b-black {
+  color: black;
+}
 .b-red {
   border-color: indianred;
 }
