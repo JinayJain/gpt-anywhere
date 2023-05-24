@@ -84,22 +84,22 @@ a:visited {
 }
 
 .center-col {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-items: center;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .center-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-items: center;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .center-grid {
-  display: grid;
-  place-items: center;
+  display: grid !important;
+  place-items: center !important;
 }
 
 /* ============== STYLING COLORS */
