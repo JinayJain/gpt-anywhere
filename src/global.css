@@ -1,3 +1,22 @@
+:root {
+  --primary-1: #0084ff;
+  --primary-2: #3fdd78;
+
+  --accent-1: #d84c10;
+  --accent-2: #3e90f0;
+  --accent-3: #8e55ea;
+  --accent-4: #8c6584;
+  --accent-5: #dda73f;
+
+  --n-1: #fefefe;
+  --n-2: #f3f5f7;
+  --n-3: #e8ecef;
+  --n-4: #6c7275;
+  --n-5: #343839;
+  --n-6: #232627;
+  --n-7: #141718;
+}
+
 html,
 body {
   height: 100%;
@@ -22,4 +41,172 @@ body {
 
 #mentionInputLights::placeholder {
   color: rgb(165, 165, 165);
+}
+
+/* ============== CUSTOM STYLING */
+.bound {
+  border: 1px dashed indianred;
+}
+
+.prompt-input {
+  background-color: transparent;
+  color: var(--n-6);
+  width: 100%;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: 18px;
+}
+
+.prompt-input:focus {
+  border: none !important;
+  outline: none !important;
+}
+
+/* ======== STYLING COLORS */
+/* === TEXT */
+.text-primary-1 {
+  color: var(--primary-1);
+}
+.text-primary-2 {
+  color: var(--primary-2);
+}
+.text-accent-1 {
+  color: var(--accent-1);
+}
+.text-accent-2 {
+  color: var(--accent-2);
+}
+.text-accent-3 {
+  color: var(--accent-3);
+}
+.text-accent-4 {
+  color: var(--accent-4);
+}
+.text-accent-5 {
+  color: var(--accent-5);
+}
+.text-n-1 {
+  color: var(--n-1);
+}
+.text-n-2 {
+  color: var(--n-2);
+}
+.text-n-3 {
+  color: var(--n-3);
+}
+.text-n-4 {
+  color: var(--n-4);
+}
+.text-n-5 {
+  color: var(--n-5);
+}
+.text-n-6 {
+  color: var(--n-6);
+}
+.text-n-7 {
+  color: var(--n-7);
+}
+/* === BACKGROUND */
+.bg-red {
+  background-color: indianred;
+}
+.bg-blue {
+  background-color: cornflowerblue;
+}
+.bg-green {
+  background-color: darkseagreen;
+}
+.bg-primary-1 {
+  background-color: var(--primary-1);
+}
+.bg-primary-2 {
+  background-color: var(--primary-2);
+}
+.bg-accent-1 {
+  background-color: var(--accent-1);
+}
+.bg-accent-2 {
+  background-color: var(--accent-2);
+}
+.bg-accent-3 {
+  background-color: var(--accent-3);
+}
+.bg-accent-4 {
+  background-color: var(--accent-4);
+}
+.bg-accent-5 {
+  background-color: var(--accent-5);
+}
+.bg-n-1 {
+  background-color: var(--n-1);
+}
+.bg-n-2 {
+  background-color: var(--n-2);
+}
+.bg-n-3 {
+  background-color: var(--n-3);
+}
+.bg-n-4 {
+  background-color: var(--n-4);
+}
+.bg-n-5 {
+  background-color: var(--n-5);
+}
+.bg-n-6 {
+  background-color: var(--n-6);
+}
+.bg-n-7 {
+  background-color: var(--n-7);
+}
+/* === BORDER */
+.b-red {
+  border-color: indianred;
+}
+.b-blue {
+  border-color: cornflowerblue;
+}
+.b-green {
+  border-color: darkseagreen;
+}
+.b-primary-1 {
+  border-color: var(--primary-1);
+}
+.b-primary-2 {
+  border-color: var(--primary-2);
+}
+.b-accent-1 {
+  border-color: var(--accent-1);
+}
+.b-accent-2 {
+  border-color: var(--accent-2);
+}
+.b-accent-3 {
+  border-color: var(--accent-3);
+}
+.b-accent-4 {
+  border-color: var(--accent-4);
+}
+.b-accent-5 {
+  border-color: var(--accent-5);
+}
+.b-n-1 {
+  border-color: var(--n-1);
+}
+.b-n-2 {
+  border-color: var(--n-2);
+}
+.b-n-3 {
+  border-color: var(--n-3);
+}
+.b-n-4 {
+  border-color: var(--n-4);
+}
+.b-n-5 {
+  border-color: var(--n-5);
+}
+.b-n-6 {
+  border-color: var(--n-6);
+}
+.b-n-7 {
+  border-color: var(--n-7);
 }
