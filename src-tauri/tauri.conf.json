@@ -7,7 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "nGePeT Dimana mana",
+    "productName": "platter",
     "version": "0.0.2"
   },
   "tauri": {
@@ -16,7 +16,19 @@
       "iconAsTemplate": true
     },
     "allowlist": {
-      "all": false,
+      "all": true,
+      "fs": {
+        "all": true,
+        "readFile": true,
+        "writeFile": true,
+        "readDir": true,
+        "copyFile": true,
+        "createDir": true,
+        "removeDir": true,
+        "removeFile": true,
+        "renameFile": true,
+        "exists": true
+      },
       "clipboard": {
         "all": true
       },
@@ -39,6 +51,9 @@
       "shell": {
         "all": false,
         "open": true
+      },
+      "path": {
+        "all": true
       }
     },
     "bundle": {
@@ -51,7 +66,11 @@
         "icons/icon.ico"
       ],
       "identifier": "dev.jinay.gpt-anywhere",
-      "targets": "all"
+      "targets": "all",
+      "macOS": {
+        "minimumSystemVersion": "10.13",
+        "exceptionDomain": ""
+      }
     },
     "security": {
       "csp": null
@@ -66,11 +85,11 @@
         "resizable": true,
         "title": "",
         "titleBarStyle": "Transparent",
-        "hiddenTitle": true,
+        "hiddenTitle": false,
         "alwaysOnTop": false,
         "center": true,
-        "width": 800,
-        "height": 480,
+        "width": 500,
+        "height": 540,
         "decorations": true,
         "transparent": true
       }
