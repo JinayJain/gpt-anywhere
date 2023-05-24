@@ -1,12 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import Root from "./Root";
-import Settings from "./pages/Settings";
+import SignIn from "./pages/SignIn";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Root>
-      <Settings />
+      <SignIn />
     </Root>
   </React.StrictMode>
 );

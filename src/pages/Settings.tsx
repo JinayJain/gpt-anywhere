@@ -24,6 +24,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT, STORE_KEY } from "../util/consts";
+import { anchorLink } from "../util/helpers";
 import store from "../util/store";
 
 function Settings() {
@@ -109,7 +110,7 @@ function Settings() {
         duration: 3000,
         isClosable: true,
       });
-      setApiKey(null)
+      setApiKey(null);
     }
   }
 
@@ -132,10 +133,18 @@ function Settings() {
 
   return (
     <Box p={4}>
-      <Heading size="md" color="whiteAlpha.600" fontWeight="normal">
+      <Heading size='md' color='whiteAlpha.600' fontWeight='normal'>
         nGePeT Dimana mana
       </Heading>
       <Heading>Settings</Heading>
+      <button
+        className='btn-blue '
+        onClick={() => {
+          anchorLink("/signin.html", false);
+        }}
+      >
+        Go to sign in
+      </button>
 
       <Stack mt={4} spacing={4}>
         {!apiKey && (
@@ -144,16 +153,16 @@ function Settings() {
             <FormLabel>Login to get acces to this apps</FormLabel>
             <Input
               mt={4}
-              type="username"
-              placeholder="Username..."
+              type='username'
+              placeholder='Username...'
               value={username || ""}
               onChange={(e) => setUsername(e.target.value)}
               isRequired
             />
             <Input
               mt={4}
-              type="password"
-              placeholder="Password..."
+              type='password'
+              placeholder='Password...'
               value={password || ""}
               onChange={(e) => setPassword(e.target.value)}
               isRequired
