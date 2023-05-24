@@ -7,10 +7,7 @@ type LogoProps = {
 export default function Logo({ width }: LogoProps) {
   return (
     <div style={{ width: width ?? "140px" }}>
-      <img
-        src='/src/assets/images/logo/platter-logo-may.svg'
-        style={{ width: "100%" }}
-      />
+      <img src='/images/logo/platter-logo-may.svg' style={{ width: "100%" }} />
     </div>
   );
 }
