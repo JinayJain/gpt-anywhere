@@ -37,10 +37,11 @@ Go to [https://jinay.dev/gpt-anywhere/](https://jinay.dev/gpt-anywhere/) to dowl
 
 # How to Contribute
 1. Install Yarn if you have not already. To install yarn, follow the instructions [here](https://classic.yarnpkg.com/en/docs/getting-started)
-2. Clone this repository from [https://github.com/JinayJain/gpt-anywhere](https://github.com/JinayJain/gpt-anywhere) or with the command: `git clone git@github.com:JinayJain/gpt-anywhere.git`
-3. Run `yarn install` to install all necessary packages
-4. Commit your changes to your local repository
-5. Create a pull request in the main repository for your changes
+2. Install Tauri, which is one of the dependencies for this project. For instructions for installing Tauri, follow the prerequisites page on their website linked [here](https://tauri.app/v1/guides/getting-started/prerequisites/).
+3. Clone this repository from [https://github.com/JinayJain/gpt-anywhere](https://github.com/JinayJain/gpt-anywhere) or with the command: `git clone git@github.com:JinayJain/gpt-anywhere.git`
+4. Run `yarn install` to install the rest of the dependencies
+5. Commit your changes to your local repository
+6. Create a pull request in the main repository for your changes
 
 # Contributers
 * [JinayJain](https://github.com/JinayJain)
