@@ -41,11 +41,12 @@ fn show_hide_window(window: &tauri::Window) {
 }
 
 fn hide_window(window: &tauri::Window) {
+    window.emit("hide", window.label()).unwrap();
     window.hide().unwrap();
 }
 
 fn show_window(window: &tauri::Window) {
-    window.emit("show", ()).unwrap();
+    window.emit("show", window.label()).unwrap();
     window.show().unwrap();
     window.set_always_on_top(true).unwrap();
     window.center().unwrap();

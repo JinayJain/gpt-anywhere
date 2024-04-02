@@ -1,9 +1,17 @@
 export const PROMPTS = {
-  base: "You are a friendly AI assistant. Answer only the question being asked in a concise manner. Use Markdown, KaTeX, {{ placeholders }}, and emojis when appropriate.",
+  base: "You are a friendly AI assistant. Answer only the question being asked in a concise manner. Use Markdown, KaTeX, $$equations$$, and emojis when appropriate.",
   linuxTerminal:
     "Act as a hypothetical Linux terminal. Only provide the output of commands I give you. Do not include anything else. Use Markdown code blocks to format output.",
   python:
     "Act as a hypothetical Python interpreter. Do not ask for more information. Assume all files/libraries are present. Only provide the output of code I give you. Do not include anything else. Use Markdown code blocks to format output.",
+} as const;
+
+export const MODELS = {
+  "gpt-3.5-turbo": "GPT 3.5 Turbo",
+  "gpt-4-0125-preview": "GPT 4 Turbo",
+  // "claude-3-opus-20240229": "Claude 3 Opus",
+  // "claude-3-sonnet-20240229": "Claude 3 Sonnet",
+  // "claude-3-haiku-20240307": "Claude 3 Haiku",
 } as const;
 
 export const SYSTEM_PROMPT = PROMPTS.base;
@@ -11,10 +19,12 @@ export const DEFAULT_MAX_TOKENS = 1000;
 export const DEFAULT_TIMEOUT = 10;
 
 export const STORE_KEY = {
-  API_KEY: "api_key",
+  OPENAI_API_KEY: "openai_api_key",
+  ANTHROPIC_API_KEY: "anthropic_api_key",
   MAX_TOKENS: "max_length",
   TIMEOUT: "timeout",
-};
+  MODEL: "model",
+} as const;
 
 export const FIRST_LOAD_TEXT = `
 ## Welcome to GPT Anywhere!
