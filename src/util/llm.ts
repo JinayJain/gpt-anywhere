@@ -1,18 +1,12 @@
-import { BaseDirectory, readTextFile } from "@tauri-apps/api/fs";
-import { CreateChatCompletionRequest } from "openai";
+import Anthropic from "@anthropic-ai/sdk";
+import { Message } from "./ai";
 import {
   SYSTEM_PROMPT,
   DEFAULT_MAX_TOKENS,
   STORE_KEY,
   DEFAULT_TIMEOUT,
 } from "./consts";
-import { ChatMessage } from "./hooks/useChatLog";
 import store from "./store";
-
-type ApiParams = Omit<
-  CreateChatCompletionRequest,
-  "model" | "messages" | "stream"
->;
 
 async function processLine(line: string) {
   const sliced = line.slice(6).trim();
@@ -38,22 +32,22 @@ async function processLine(line: string) {
   };
 }
 
-async function sendApiRequest(
-  chat: ChatMessage[],
+type SendRequestFn = (
+  chat: Message[],
   controller: AbortController,
-  apiParams?: ApiParams
-) {
-  // const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
-  const apiKey = await store.get(STORE_KEY.API_KEY);
+  model: string
+) => Promise<Response>;
+
+const sendOpenAiApiRequest: SendRequestFn = async (chat, controller, model) => {
+  const apiKey = await store.get(STORE_KEY.OPENAI_API_KEY);
   const max_tokens =
     Number(await store.get(STORE_KEY.MAX_TOKENS)) || DEFAULT_MAX_TOKENS;
 
   const { signal } = controller;
 
   const apiChat = chat.map((msg) => ({
-    role: msg.type === "prompt" ? "user" : "system",
-    // TypeScript doesn't infer that msg isn't an error
-    content: msg.text,
+    role: msg.role,
+    content: msg.content,
   }));
 
   return await fetch("https://api.openai.com/v1/chat/completions", {
@@ -65,7 +59,7 @@ async function sendApiRequest(
     },
     signal,
     body: JSON.stringify({
-      model: "gpt-3.5-turbo",
+      model,
       messages: [
         {
           role: "system",
@@ -75,10 +69,60 @@ async function sendApiRequest(
       ],
       stream: true,
       max_tokens,
-      ...apiParams,
     }),
   });
-}
+};
+
+// const sendAnthropicApiRequest: SendRequestFn = async (
+//   chat,
+//   controller,
+//   model
+// ) => {
+//   const apiKey = (await store.get(STORE_KEY.ANTHROPIC_API_KEY)) as string;
+//   const max_tokens =
+//     Number(await store.get(STORE_KEY.MAX_TOKENS)) || DEFAULT_MAX_TOKENS;
+
+//   const { signal } = controller;
+
+//   const apiChat = chat.map((msg) => ({
+//     role: msg.role,
+//     content: msg.content,
+//   }));
+//   console.log(apiKey);
+
+//   const anthropic = new Anthropic({
+//     apiKey,
+//   });
+
+//   // const message = await anthropic.messages.create({
+//   //   max_tokens: 1024,
+//   //   messages: [{ role: "user", content: "Hello, Claude" }],
+//   //   model: "claude-3-sonnet-20240229",
+//   // });
+
+//   // console.log(message.content);
+
+//   // return await sendOpenAiApiRequest(chat, controller, model);
+//   return await fetch("https://api.anthropic.com/v1/messages", {
+//     method: "POST",
+//     mode: "cors",
+//     headers: {
+//       "Access-Control-Allow-Origin": "*",
+//       "x-api-key": apiKey,
+//       "anthropic-version": "2023-06-01",
+//       "anthropic-beta": "messages-2023-12-15",
+//       "content-type": "application/json",
+//     },
+//     signal,
+//     body: JSON.stringify({
+//       model,
+//       system: SYSTEM_PROMPT,
+//       messages: apiChat,
+//       stream: true,
+//       max_tokens,
+//     }),
+//   });
+// };
 
 async function processBody(
   reader: ReadableStreamDefaultReader,
@@ -123,25 +167,22 @@ async function processBody(
 async function chatComplete({
   chat,
   onChunk,
-  apiParams,
+  model,
 }: {
-  chat: ChatMessage[];
+  chat: Message[];
   onChunk: (message: string) => void;
-  apiParams?: ApiParams;
+  model: string;
 }) {
   const controller = new AbortController();
-
-  console.log("sending request");
 
   const timeoutSec =
     Number(await store.get(STORE_KEY.TIMEOUT)) || DEFAULT_TIMEOUT;
 
   const handle = setTimeout(() => {
-    console.log("timeout fired");
     controller.abort();
   }, timeoutSec * 1000);
 
-  const res = await sendApiRequest(chat, controller, apiParams);
+  const res = await sendOpenAiApiRequest(chat, controller, model);
 
   if (!res.ok) {
     if (res.status === 401) {

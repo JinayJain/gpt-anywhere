@@ -9,6 +9,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Select,
   Slider,
   SliderFilledTrack,
   SliderThumb,
@@ -17,18 +18,19 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { listen } from "@tauri-apps/api/event";
-import { CiChat1, CiChat2, CiTempHigh } from "react-icons/ci";
+import { CiTempHigh } from "react-icons/ci";
 import { BsChatRightFill } from "react-icons/bs";
 import { useEffect, useRef, useState } from "react";
 import {
   ChevronDownIcon,
   ChevronUpIcon,
   DragHandleIcon,
-  NotAllowedIcon,
   SettingsIcon,
 } from "@chakra-ui/icons";
 import { invoke } from "@tauri-apps/api";
-import ToolbarButton from "./ToolbarButton";
+import React from "react";
+import { MODELS, STORE_KEY } from "../util/consts";
+import store from "../util/store";
 
 const TEMPERATURE_GRADES = [
   {
@@ -68,10 +70,34 @@ function Search({
   isLoading?: boolean;
 } & BoxProps) {
   const [prompt, setPrompt] = useState("");
+  const [model, setModel] = useState<string>();
   const [temperature, setTemperature] = useState(1.0);
   const [showOptions, setShowOptions] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const loadModel = async () => {
+      const model: string | null = await store.get(STORE_KEY.MODEL);
+      console.log("model loaded", model);
+
+      const defaultModel = Object.keys(MODELS)[0];
+      setModel(model ?? defaultModel);
+    };
+
+    loadModel();
+  }, []);
+
+  useEffect(() => {
+    console.log("model changed", model);
+    const updateModel = async () => {
+      if (model) {
+        await store.set(STORE_KEY.MODEL, model);
+      }
+    };
+
+    updateModel();
+  }, [model]);
 
   const temperatureLabel = TEMPERATURE_GRADES.find(
     (grade) => grade.value <= temperature
@@ -158,7 +184,7 @@ function Search({
               onMouseEnter={() => setShowTooltip(true)}
               onMouseLeave={() => setShowTooltip(false)}
               colorScheme="red"
-              flex={1}
+              flex={2}
             >
               <SliderTrack>
                 <SliderFilledTrack />
@@ -175,6 +201,17 @@ function Search({
               {temperatureLabel || temperature}
             </Text>
 
+            <Select
+              value={model}
+              onChange={(e) => setModel(e.target.value)}
+              flex={1}
+            >
+              {Object.keys(MODELS).map((key) => (
+                <option key={key} value={key}>
+                  {MODELS[key as keyof typeof MODELS]}
+                </option>
+              ))}
+            </Select>
             <Button
               leftIcon={<Icon as={SettingsIcon} />}
               colorScheme="green"
@@ -184,16 +221,6 @@ function Search({
             >
               Settings
             </Button>
-
-            {/* <Button
-              leftIcon={<Icon as={NotAllowedIcon} />}
-              colorScheme="red"
-              variant="outline"
-              onClick={onClear}
-              size="sm"
-            >
-              Clear Chat
-            </Button> */}
           </HStack>
         </Box>
       </Collapse>
@@ -201,4 +228,4 @@ function Search({
   );
 }
 
-export default Search;
+export default React.memo(Search);

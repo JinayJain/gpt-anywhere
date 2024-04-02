@@ -1,66 +1,71 @@
 import Search from "../components/Search";
-import { Box, Button, Center } from "@chakra-ui/react";
+import { Box, Button, Center, Text } from "@chakra-ui/react";
 import ResponseBox from "../components/ResponseBox";
-import { useState } from "react";
-import { chatComplete } from "../util/openai";
+import { memo, useCallback, useState } from "react";
+import { chatComplete } from "../util/llm";
 import { AnimatePresence, motion } from "framer-motion";
 import UnauthorizedErrorBox from "../components/UnauthorizedErrorBox";
 import ErrorBox from "../components/ErrorBox";
 import PromptBox from "../components/PromptBox";
 import useChatLog, { ChatMessage } from "../util/hooks/useChatLog";
 import { NotAllowedIcon, RepeatIcon } from "@chakra-ui/icons";
-
-const CLEAR_TEXT = "";
-// const CLEAR_TEXT = fillerMarkdown;
+import { Message, useChat } from "../util/ai";
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [bgClicked, setBgClicked] = useState(false);
-  const { chatLog, addPrompt, addResponse, clearChatLog } = useChatLog();
+  // const { chatLog, addUser, addAssistant, clearChatLog } = useChatLog();
+  const { messages, addPrompt, reset } = useChat();
   const [error, setError] = useState<Error | null>(null);
 
-  const handleBgClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (e.target !== e.currentTarget) {
-      return;
-    }
-
-    setBgClicked(true);
-    setTimeout(() => {
-      setBgClicked(false);
-    }, 200);
-  };
-
-  const handleGenerate = async (prompt: string, temperature = 1.0) => {
-    if (prompt) {
-      const chatHistory: ChatMessage[] = [
-        ...chatLog,
-        { type: "prompt", text: prompt },
-      ];
-
-      addPrompt(prompt);
-      setError(null);
-      setIsLoading(true);
-
-      try {
-        const response = await chatComplete({
-          chat: chatHistory,
-          onChunk(chunk) {},
-          apiParams: {
-            temperature,
-          },
-        });
-
-        addResponse(response);
-      } catch (e) {
-        if (e instanceof Error) {
-          setError(e);
-        }
-        console.log(e);
+  const handleBgClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      if (e.target !== e.currentTarget) {
+        return;
       }
 
-      setIsLoading(false);
-    }
-  };
+      setBgClicked(true);
+      setTimeout(() => {
+        setBgClicked(false);
+      }, 200);
+    },
+    []
+  );
+
+  const handleGenerate = useCallback(
+    async (prompt: string, temperature = 1.0) => {
+      addPrompt(prompt);
+
+      const NUM_WORDS = 50;
+
+      // if (prompt) {
+      //   const chatHistory: ChatMessage[] = [
+      //     ...chatLog,
+      //     { role: "user", text: prompt },
+      //   ];
+      //   addUser(prompt);
+      //   setError(null);
+      //   setIsLoading(true);
+      //   try {
+      //     const response = await chatComplete({
+      //       chat: chatHistory,
+      //       onChunk(chunk) {},
+      //       apiParams: {
+      //         temperature,
+      //       },
+      //     });
+      //     addAssistant(response);
+      //   } catch (e) {
+      //     if (e instanceof Error) {
+      //       setError(e);
+      //     }
+      //     console.log(e);
+      //   }
+      //   setIsLoading(false);
+      // }
+    },
+    [addPrompt]
+  );
 
   return (
     <Box
@@ -74,14 +79,13 @@ function App() {
     >
       <Search
         onGenerate={handleGenerate}
-        onClear={clearChatLog}
+        onClear={reset}
         isLoading={isLoading}
         mb={2}
       />
 
       <Box overflowY="auto" maxH="100%">
-        <AnimatePresence>
-          {error && (
+        {/* {error && (
             <Box
               as={motion.div}
               initial={{ opacity: 0 }}
@@ -98,28 +102,11 @@ function App() {
                 <ErrorBox error={error} />
               )}
             </Box>
-          )}
+          )} */}
 
-          {[...chatLog]
-            .map((message, i) => (
-              <Box
-                key={i}
-                as={motion.div}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                mt={i === chatLog.length - 1 ? 0 : 2}
-              >
-                {message.type === "prompt" ? (
-                  <PromptBox prompt={message.text} />
-                ) : (
-                  <ResponseBox responseMarkdown={message.text} />
-                )}
-              </Box>
-            ))
-            .reverse()}
+        <Messages messages={messages} />
 
-          {chatLog.length > 0 && (
+        {/* {messages.length > 0 && (
             <Center
               as={motion.div}
               initial={{ opacity: 0 }}
@@ -130,17 +117,34 @@ function App() {
               <Button
                 size="sm"
                 leftIcon={<NotAllowedIcon />}
-                onClick={clearChatLog}
+                onClick={reset}
                 colorScheme="red"
               >
                 Reset Chat
               </Button>
             </Center>
-          )}
-        </AnimatePresence>
+          )} */}
       </Box>
     </Box>
   );
 }
+
+function Messages({ messages }: { messages: Message[] }) {
+  return (
+    <>
+      {[...messages]
+        .map((message) => (
+          <Box key={message.id} mb={2}>
+            <MessageDisplay message={message} />
+          </Box>
+        ))
+        .reverse()}
+    </>
+  );
+}
+
+const MessageDisplay = memo(({ message }: { message: Message }) => {
+  return <ResponseBox responseMarkdown={message.content} />;
+});
 
 export default App;

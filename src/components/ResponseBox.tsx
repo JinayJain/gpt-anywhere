@@ -1,5 +1,4 @@
 import {
-  Text,
   Box,
   BoxProps,
   Accordion,
@@ -7,27 +6,17 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  Button,
-  HStack,
   Stack,
-  IconButton,
   Icon,
-  Flex,
-  Tooltip,
-  IconButtonProps,
 } from "@chakra-ui/react";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import ReactMarkdown from "react-markdown";
 import renderer from "../util/markdown";
 import { writeText } from "@tauri-apps/api/clipboard";
-import { FiClipboard, FiCopy, FiRefreshCw } from "react-icons/fi";
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { FiRefreshCw } from "react-icons/fi";
 import CopyButton from "./CopyButton";
 import remarkBreaks from "remark-breaks";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
-import { NotAllowedIcon, SettingsIcon } from "@chakra-ui/icons";
-import { invoke } from "@tauri-apps/api";
 import ToolbarButton from "./ToolbarButton";
 
 const COPY_MSG_TIMEOUT = 1000;

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export type ChatMessage = {
-  type: "prompt" | "response";
+  role: "user" | "assistant";
   text: string;
 };
 
@@ -12,12 +12,12 @@ function useChatLog() {
     setChatLog((chatLog) => [...chatLog, message]);
   };
 
-  const addPrompt = (text: string) => {
-    addMessage({ type: "prompt", text });
+  const addUser = (text: string) => {
+    addMessage({ role: "user", text });
   };
 
-  const addResponse = (text: string) => {
-    addMessage({ type: "response", text });
+  const addAssistant = (text: string) => {
+    addMessage({ role: "assistant", text });
   };
 
   const clearChatLog = () => {
@@ -26,8 +26,8 @@ function useChatLog() {
 
   return {
     chatLog,
-    addPrompt,
-    addResponse,
+    addUser,
+    addAssistant,
     clearChatLog,
   };
 }

@@ -28,17 +28,24 @@ import store from "../util/store";
 
 function Settings() {
   const toast = useToast();
-  const [apiKey, setApiKey] = useState<string | null>(null);
+  const [openAiKey, setOpenAiKey] = useState<string | null>(null);
+  const [anthropicKey, setAnthropicKey] = useState<string | null>(null);
   const [timeout, setTimeout] = useState<number | null>(null);
   const [maxTokens, setMaxTokens] = useState<number | null>(null);
 
   useEffect(() => {
     const populateFields = async () => {
-      const key: string | null = await store.get(STORE_KEY.API_KEY);
+      const openAiKey: string | null = await store.get(
+        STORE_KEY.OPENAI_API_KEY
+      );
+      const anthropicKey: string | null = await store.get(
+        STORE_KEY.ANTHROPIC_API_KEY
+      );
       const timeout: number | null = await store.get(STORE_KEY.TIMEOUT);
       const maxTokens: number | null = await store.get(STORE_KEY.MAX_TOKENS);
 
-      setApiKey(key);
+      setOpenAiKey(openAiKey);
+      setAnthropicKey(anthropicKey);
       setTimeout(timeout ?? DEFAULT_TIMEOUT);
       setMaxTokens(maxTokens ?? DEFAULT_MAX_TOKENS);
     };
@@ -47,9 +54,8 @@ function Settings() {
   }, []);
 
   const handleSave = async () => {
-    if (!apiKey) return;
-
-    await store.set(STORE_KEY.API_KEY, apiKey);
+    await store.set(STORE_KEY.OPENAI_API_KEY, openAiKey);
+    await store.set(STORE_KEY.ANTHROPIC_API_KEY, anthropicKey);
     await store.set(STORE_KEY.TIMEOUT, timeout ?? DEFAULT_TIMEOUT);
     await store.set(STORE_KEY.MAX_TOKENS, maxTokens ?? DEFAULT_MAX_TOKENS);
     await store.save();
@@ -76,8 +82,8 @@ function Settings() {
           <Input
             type="password"
             placeholder="sk-..."
-            value={apiKey || ""}
-            onChange={(e) => setApiKey(e.target.value)}
+            value={openAiKey || ""}
+            onChange={(e) => setOpenAiKey(e.target.value)}
             isRequired
           />
           <FormHelperText>
@@ -91,6 +97,27 @@ function Settings() {
             </Link>
           </FormHelperText>
         </FormControl>
+
+        {/* <FormControl>
+          <FormLabel>Anthropic API Key</FormLabel>
+          <Input
+            type="password"
+            placeholder="sk-..."
+            value={anthropicKey || ""}
+            onChange={(e) => setAnthropicKey(e.target.value)}
+          />
+
+          <FormHelperText>
+            You can generate an API key on{" "}
+            <Link
+              href="https://console.anthropic.com/settings/keys"
+              isExternal
+              color="blue.400"
+            >
+              Anthropic's website
+            </Link>
+          </FormHelperText>
+        </FormControl> */}
 
         <FormControl>
           <FormLabel>Timeout</FormLabel>
