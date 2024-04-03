@@ -68,15 +68,7 @@ export function useChat() {
     [messages]
   );
 
-  const reset = useCallback(() => {
-    setMessages([
-      {
-        id: generateId(),
-        role: "system",
-        content: "You are a helpful assistant.",
-      },
-    ]);
-  }, []);
+  const reset = useCallback(() => setMessages([]), []);
 
   return {
     messages,

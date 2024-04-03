@@ -54,7 +54,7 @@ function ResponseBox({
   };
 
   return (
-    <Stack bg="blackAlpha.800" rounded="md" p={4} {...props}>
+    <Stack bg="blackAlpha.800" rounded="md" p={4} {...props} role="group">
       <Box>
         <ReactMarkdown
           remarkPlugins={[remarkBreaks, remarkMath]}
