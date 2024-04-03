@@ -28,9 +28,9 @@
     "react-icons": "^4.8.0",
     "react-markdown": "^8.0.x",
     "react-syntax-highlighter": "^15.5.0",
-    "rehype-katex": "^6.0.x",
-    "remark-breaks": "^4.0.0",
-    "remark-math": "^6.0.0",
+    "rehype-katex": "^6.0.2",
+    "remark-breaks": "^3.0.2",
+    "remark-math": "^5.1.1",
     "tauri-plugin-store-api": "https://github.com/tauri-apps/tauri-plugin-store"
   },
   "devDependencies": {

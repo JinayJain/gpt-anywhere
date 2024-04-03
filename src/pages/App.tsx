@@ -71,6 +71,25 @@ function App() {
       />
 
       <Box overflowY="auto" maxH="100%">
+        {messages.length > 0 && (
+          <Center
+            as={motion.div}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            mb={2}
+          >
+            <Button
+              size="sm"
+              leftIcon={<NotAllowedIcon />}
+              onClick={reset}
+              colorScheme="red"
+            >
+              Reset Chat
+            </Button>
+          </Center>
+        )}
+
         {error && (
           <Box
             as={motion.div}
@@ -91,25 +110,6 @@ function App() {
         )}
 
         <Messages messages={messages} />
-
-        {/* {messages.length > 0 && (
-            <Center
-              as={motion.div}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              mt={2}
-            >
-              <Button
-                size="sm"
-                leftIcon={<NotAllowedIcon />}
-                onClick={reset}
-                colorScheme="red"
-              >
-                Reset Chat
-              </Button>
-            </Center>
-          )} */}
       </Box>
     </Box>
   );
