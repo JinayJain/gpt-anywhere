@@ -89,10 +89,11 @@ function Search({
   }, []);
 
   useEffect(() => {
-    console.log("model changed", model);
     const updateModel = async () => {
       if (model) {
         await store.set(STORE_KEY.MODEL, model);
+        await store.save();
+        console.log("model changed", model);
       }
     };
 
