@@ -34,35 +34,21 @@ function App() {
 
   const handleGenerate = useCallback(
     async (prompt: string, temperature = 1.0) => {
-      addPrompt(prompt);
+      if (isLoading || !prompt) {
+        return;
+      }
 
-      const NUM_WORDS = 50;
+      setIsLoading(true);
+      setError(null);
 
-      // if (prompt) {
-      //   const chatHistory: ChatMessage[] = [
-      //     ...chatLog,
-      //     { role: "user", text: prompt },
-      //   ];
-      //   addUser(prompt);
-      //   setError(null);
-      //   setIsLoading(true);
-      //   try {
-      //     const response = await chatComplete({
-      //       chat: chatHistory,
-      //       onChunk(chunk) {},
-      //       apiParams: {
-      //         temperature,
-      //       },
-      //     });
-      //     addAssistant(response);
-      //   } catch (e) {
-      //     if (e instanceof Error) {
-      //       setError(e);
-      //     }
-      //     console.log(e);
-      //   }
-      //   setIsLoading(false);
-      // }
+      try {
+        await addPrompt(prompt, temperature);
+      } catch (e) {
+        if (e instanceof Error) {
+          setError(e);
+        }
+      }
+      setIsLoading(false);
     },
     [addPrompt]
   );
@@ -85,24 +71,24 @@ function App() {
       />
 
       <Box overflowY="auto" maxH="100%">
-        {/* {error && (
-            <Box
-              as={motion.div}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              mb={2}
-              rounded="md"
-              overflow="hidden"
-              background="blackAlpha.800"
-            >
-              {error.message === "Unauthorized" ? (
-                <UnauthorizedErrorBox />
-              ) : (
-                <ErrorBox error={error} />
-              )}
-            </Box>
-          )} */}
+        {error && (
+          <Box
+            as={motion.div}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            mb={2}
+            rounded="md"
+            overflow="hidden"
+            background="blackAlpha.800"
+          >
+            {error.message === "Unauthorized" ? (
+              <UnauthorizedErrorBox />
+            ) : (
+              <ErrorBox error={error} />
+            )}
+          </Box>
+        )}
 
         <Messages messages={messages} />
 

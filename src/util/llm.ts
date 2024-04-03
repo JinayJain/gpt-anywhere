@@ -35,10 +35,16 @@ async function processLine(line: string) {
 type SendRequestFn = (
   chat: Message[],
   controller: AbortController,
-  model: string
+  model: string,
+  temperature?: number
 ) => Promise<Response>;
 
-const sendOpenAiApiRequest: SendRequestFn = async (chat, controller, model) => {
+const sendOpenAiApiRequest: SendRequestFn = async (
+  chat,
+  controller,
+  model,
+  temperature
+) => {
   const apiKey = await store.get(STORE_KEY.OPENAI_API_KEY);
   const max_tokens =
     Number(await store.get(STORE_KEY.MAX_TOKENS)) || DEFAULT_MAX_TOKENS;
@@ -69,6 +75,7 @@ const sendOpenAiApiRequest: SendRequestFn = async (chat, controller, model) => {
       ],
       stream: true,
       max_tokens,
+      temperature,
     }),
   });
 };
@@ -168,10 +175,12 @@ async function chatComplete({
   chat,
   onChunk,
   model,
+  temperature = 1.0,
 }: {
   chat: Message[];
   onChunk: (message: string) => void;
   model: string;
+  temperature?: number;
 }) {
   const controller = new AbortController();
 
@@ -182,7 +191,7 @@ async function chatComplete({
     controller.abort();
   }, timeoutSec * 1000);
 
-  const res = await sendOpenAiApiRequest(chat, controller, model);
+  const res = await sendOpenAiApiRequest(chat, controller, model, temperature);
 
   if (!res.ok) {
     if (res.status === 401) {
