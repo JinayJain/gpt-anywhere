@@ -1,3 +1,7 @@
+<div align="center"><h2>Want to integrate AI into Chrome? Try out my new project, <a href="https://chromewebstore.google.com/detail/aurora-instant-access-to/jodopikgpikacoinocjkddpogcccdmcl">Aurora</a></h2></div>
+
+<br>
+
 <div align="center">
   <h1>GPT Anywhere</h1>
   <p>Use GPT anywhere with just one shortcut. Available for <b>Mac, Windows, and Linux</b></p>
